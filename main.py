@@ -6,23 +6,21 @@ class Video():
     def write_video(self):
         '''Doc'''
         cap = cv2.VideoCapture(0)
-            while True:
-                ret, img = cap.read()
-                cv2.imshow("camera", img)
-                cv2.imwrite('screen.jpg', img)
-                if cv2.waitKey(10) == 27: # Клавиша Esc
-                    break
-            cap.release()
-            cv2.destroyAllWindows()
+        while True:
+            ret, img = cap.read()
+            cv2.imshow("camera", img)
+            cv2.imwrite('screen.jpg', img)
+            if cv2.waitKey(10) == 27: # Клавиша Esc
+                break
+        cap.release()
+        cv2.destroyAllWindows()
 
 
-def main_algoritm():
-    pass
 
 if __name__ == "__main__":
-    # parser = argparse.ArgumentParser()
-    # parser.add_argument('--weights', nargs='+', type=str, default='yolov5s.pt', help='model.pt path(s)')
-    # parser.add_argument('--source', type=str, default='data/images', help='source')  # file/folder, 0 for webcam
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--weights', nargs='+', type=str, default='yolov5/weights/yolov5s.pt', help='model.pt path(s)')
+    parser.add_argument('--source', type=str, default='data/images', help='source')  # file/folder, 0,1,2 for webcam
     # parser.add_argument('--img-size', type=int, default=640, help='inference size (pixels)')
     # parser.add_argument('--conf-thres', type=float, default=0.25, help='object confidence threshold')
     # parser.add_argument('--iou-thres', type=float, default=0.45, help='IOU threshold for NMS')
@@ -39,4 +37,5 @@ if __name__ == "__main__":
     # parser.add_argument('--exist-ok', action='store_true', help='existing project/name ok, do not increment')
     opt = parser.parse_args()
     print(opt)
-    main_algoritm()
+
+    sourse = opt.sourse
