@@ -1,20 +1,41 @@
 import cv2
 import argparse
 
-class Video():
+class Camera_work():
 
-    def write_video(self):
+    def run_camera(self):
         '''Doc'''
         cap = cv2.VideoCapture(0)
         while True:
             ret, img = cap.read()
             cv2.imshow("camera", img)
-            cv2.imwrite('screen.jpg', img)
             if cv2.waitKey(10) == 27: # Клавиша Esc
                 break
         cap.release()
         cv2.destroyAllWindows()
 
+    def screen_photo(self):
+        '''Doc'''
+        pass
+
+    def write_photo(self):
+        '''Doc'''
+        pass
+
+    def write_video(self):
+        '''Doc'''
+        pass
+
+class Sms_delivery():
+
+    def pull_sms(self):
+        '''Doc'''
+        pass
+
+class Detect():
+    def run_detect(self):
+        '''Doc'''
+        pass
 
 
 if __name__ == "__main__":
@@ -38,4 +59,7 @@ if __name__ == "__main__":
     opt = parser.parse_args()
     print(opt)
 
-    sourse = opt.sourse
+    # sourse = opt.sourse
+
+    # vid = Video()
+    # vid.write_video()
