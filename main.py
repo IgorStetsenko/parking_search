@@ -30,14 +30,23 @@ class Camera_work():
         '''Doc'''
         pass
 
+class Data_calculate():
+    def calculate_iou(self, boxes):
+        """Calculate iou-metrics function.
+            imput: boxes predicted
+            output: iouarray"""
+        pass
+
+    def boxes_intersection_search(self):
+        '''This function do boxes intersection search'''
+        pass
+
+
+
 class Sms_delivery():
 
     def pull_sms(self):
         '''Doc'''
-        pass
-
-class Data_calculate():
-    def calculate_iou(self):
         pass
 
 class Detect():
@@ -51,6 +60,4 @@ if __name__ == "__main__":
     parser.add_argument('--source', type=str, default='data/images', help='source')  # file/folder, 0,1,2 for webcam
     opt = parser.parse_args()
 
-
     pred = detection_function()
-    print(pred)
