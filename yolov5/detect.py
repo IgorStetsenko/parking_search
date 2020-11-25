@@ -15,8 +15,10 @@ from utils.plots import plot_one_box
 from utils.torch_utils import select_device, load_classifier, time_synchronized
 
 
-def detect(source="yolov5/66521.jpg", weights="yolov5s.pt" , view_img='store_true', save_txt=False, imgsz=640,
-           save_img=False):
+def detection_function(source="yolov5/66521.jpg", weights="yolov5s.pt", view_img='store_true', save_txt=False, imgsz=640,
+                       save_img=False):
+    """The main detection function"""
+    box = []
 
     webcam = source.isnumeric() or source.endswith('.txt') or source.lower().startswith(
         ('rtsp://', 'rtmp://', 'http://'))
@@ -109,7 +111,9 @@ def detect(source="yolov5/66521.jpg", weights="yolov5s.pt" , view_img='store_tru
 
                     if save_img or view_img:  # Add bbox to image
                         label = '%s %.2f' % (names[int(cls)], conf)
-                        plot_one_box(xyxy, im0, label=label, color=colors[int(cls)], line_thickness=3)
+
+                        points = plot_one_box(xyxy, im0, label=label, color=colors[int(cls)], line_thickness=3)
+                        box.append(points)
 
             # Print time (inference + NMS)
             print('%sDone. (%.3fs)' % (s, t2 - t1))
@@ -139,8 +143,14 @@ def detect(source="yolov5/66521.jpg", weights="yolov5s.pt" , view_img='store_tru
 
     if save_txt or save_img:
         print('Results saved to %s' % save_dir)
+        print('Done. (%.3fs)' % (time.time() - t0))
+    return box
 
-    print('Done. (%.3fs)' % (time.time() - t0))
+
+
+
+
+
 
 
 # if __name__ == '__main__':
