@@ -60,4 +60,5 @@ if __name__ == "__main__":
     parser.add_argument('--source', type=str, default='data/images', help='source')  # file/folder, 0,1,2 for webcam
     opt = parser.parse_args()
 
-    pred = detection_function()
+    prediction_boxes = detection_function()
+    print(prediction_boxes)
