@@ -37,9 +37,23 @@ class Data_calculate():
             output: iouarray"""
         pass
 
-    def boxes_intersection_search(self):
+    def boxes_intersection_search(self, prediction_boxes):
         """This function do boxes intersection search"""
-        pass
+        j = 0
+        for n in prediction_boxes:
+            i = prediction_boxes.index(n)
+            if j == len(prediction_boxes) - 1:
+                break
+            elif i != len(prediction_boxes) - 1:
+                while i != len(prediction_boxes) - 1:
+                    a = prediction_boxes[i + 1]
+                    iou(n, a)
+                    #                 print(n == a, n, a)
+                    i += 1
+                j += 1
+            else:
+                print('Error')
+            pass
 
     def test_intersection_function(self, boxes_intersection_search):
         """Intersection function test util"""
@@ -67,3 +81,4 @@ if __name__ == "__main__":
 
     prediction_boxes = detection_function()
     print(prediction_boxes)
+
