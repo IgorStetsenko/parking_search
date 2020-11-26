@@ -38,7 +38,12 @@ class Data_calculate():
         pass
 
     def boxes_intersection_search(self):
-        '''This function do boxes intersection search'''
+        """This function do boxes intersection search"""
+        pass
+
+    def test_intersection_function(self, boxes_intersection_search):
+        """Intersection function test util"""
+
         pass
 
 
