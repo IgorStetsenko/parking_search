@@ -5,18 +5,22 @@ from yolov5.detect import detection_function
 
 test_image_path = 'screen.jpg'
 
+
 class Camera_work():
 
-    def run_camera(self):
-        '''Doc'''
-        cap = cv2.VideoCapture(0)
+    def run_camera(self, source):
+        """Doc"""
+        cap = cv2.VideoCapture(source)
         while True:
             ret, img = cap.read()
             cv2.imshow("camera", img)
-            if cv2.waitKey(10) == 27: # Клавиша Esc
+            if cv2.waitKey(10) == 27:  # Клавиша Esc
                 break
         cap.release()
         cv2.destroyAllWindows()
+
+    def read_video(self):
+        """Doc"""
 
     def screen_photo(self):
         '''Doc'''
@@ -29,6 +33,7 @@ class Camera_work():
     def write_video(self):
         '''Doc'''
         pass
+
 
 class Data_calculate():
 
@@ -71,17 +76,18 @@ class Data_calculate():
         pass
 
 
-
 class Sms_delivery():
 
     def pull_sms(self):
         '''Doc'''
         pass
 
+
 class Detect():
     def run_detect(self):
         '''Doc'''
         pass
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -89,6 +95,7 @@ if __name__ == "__main__":
     parser.add_argument('--source', type=str, default='data/images', help='source')  # file/folder, 0,1,2 for webcam
     opt = parser.parse_args()
 
-    prediction_boxes = detection_function()
-    print(prediction_boxes)
-
+    prediction_boxes = detection_function(source="yolov5/videoplayback.mp4")
+    # print(prediction_boxes)
+    # cam = Camera_work()
+    # cam.run_camera("yolov5/videoplayback.mp4")
