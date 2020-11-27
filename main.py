@@ -31,11 +31,22 @@ class Camera_work():
         pass
 
 class Data_calculate():
-    def calculate_iou(self, boxes):
-        """Calculate iou-metrics function.
-            imput: boxes predicted
-            output: iouarray"""
-        pass
+
+    def iou_calculate(self, box1, box2):
+        """Функция рассчитывает метрику IoU и проверяет пересечение прямоугольников"""
+        flag = True
+        ax1, ay1, ax2, ay2 = box1[0][0], box1[0][1], box1[1][0], box1[1][1]
+        bx1, by1, bx2, by2 = box2[0][0], box2[0][1], box2[1][0], box1[1][1]
+        if ax1 < bx2 and ax2 > bx1 and ay1 < by2 and ay2 > by1:
+            print("пересекаются")
+            sq_a = abs(ax1 - ax2) * abs(ay1 - ay2)
+            sq_b = abs(bx1 - bx2) * abs(by1 - by2)
+            interArea = abs(max([ax1, ax2]) - min([bx1, bx2])) * abs(max([ay1, ay2]) - min([by1, by2]))
+            iou = interArea / float(abs(abs(sq_a + sq_b) - interArea))
+            return iou
+        else:
+            print("не пересекаются")
+            return 0
 
     def boxes_intersection_search(self, prediction_boxes):
         """This function do boxes intersection search"""
@@ -47,13 +58,12 @@ class Data_calculate():
             elif i != len(prediction_boxes) - 1:
                 while i != len(prediction_boxes) - 1:
                     a = prediction_boxes[i + 1]
-                    iou(n, a)
+                    self.iou_calculate(n, a)
                     #                 print(n == a, n, a)
                     i += 1
                 j += 1
             else:
                 print('Error')
-            pass
 
     def test_intersection_function(self, boxes_intersection_search):
         """Intersection function test util"""
