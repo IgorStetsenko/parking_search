@@ -2,6 +2,8 @@ import cv2
 import argparse
 from yolov5.utils.datasets import LoadImages
 from yolov5.detect import detection_function
+from twilio.rest import Client
+
 
 test_image_path = 'screen.jpg'
 
