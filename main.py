@@ -75,7 +75,21 @@ class Sms_delivery():
 
     def pull_sms(self):
         '''Doc'''
-        pass
+        # Twilio account details
+        twilio_account_sid = 'AC76115b7fa91b315f7d21c9640caa54f6'
+        twilio_auth_token = 'a2ce2eb68dcf6137930a5db1d2cba18b'
+        twilio_source_phone_number = '+19288131669'
+
+        # Create a Twilio client object instance
+        client = Client(twilio_account_sid, twilio_auth_token)
+
+        # Send an SMS
+        message = client.messages.create(
+            body="This is my SMS message!",
+            from_=twilio_source_phone_number,
+            to="+79381424592"
+        )
+
 
 class Detect():
     def run_detect(self):
