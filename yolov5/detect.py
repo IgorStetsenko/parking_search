@@ -15,8 +15,8 @@ from utils.plots import plot_one_box
 from utils.torch_utils import select_device, load_classifier, time_synchronized
 
 
-def detection_function(source="yolov5/66521.jpg", weights="yolov5s.pt", view_img='store_true', save_txt=False, imgsz=640,
-                       save_img=False):
+def detection_function(source="yolov5/66521.jpg", weights="yolov5s.pt", view_img='store_true', save_txt=False,
+                       imgsz=640, save_img=False):
     """The main detection function"""
     box = []
 

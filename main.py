@@ -34,7 +34,6 @@ class Camera_work():
         '''Doc'''
         pass
 
-
 class Data_calculate():
 
     def iou_calculate(self, box1, box2):
@@ -70,18 +69,11 @@ class Data_calculate():
             else:
                 print('Error')
 
-    def test_intersection_function(self, boxes_intersection_search):
-        """Intersection function test util"""
-
-        pass
-
-
 class Sms_delivery():
 
     def pull_sms(self):
         '''Doc'''
         pass
-
 
 class Detect():
     def run_detect(self):
@@ -95,7 +87,7 @@ if __name__ == "__main__":
     parser.add_argument('--source', type=str, default='data/images', help='source')  # file/folder, 0,1,2 for webcam
     opt = parser.parse_args()
 
-    prediction_boxes = detection_function(source="yolov5/videoplayback.mp4")
+    prediction_boxes = detection_function(source="yolov5/videoplayback.avi")
     # print(prediction_boxes)
     # cam = Camera_work()
     # cam.run_camera("yolov5/videoplayback.mp4")
