@@ -76,16 +76,16 @@ class Sms_delivery():
     def pull_sms(self):
         '''Doc'''
         # Twilio account details
-        twilio_account_sid = 'AC76115b7fa91b315f7d21c9640caa54f6'
-        twilio_auth_token = 'a2ce2eb68dcf6137930a5db1d2cba18b'
-        twilio_source_phone_number = '+19288131669'
+        twilio_account_sid = 'TWILIO_ACCOUNT_SID'
+        twilio_auth_token = 'TWILIO_AUTH_TOKEN'
+        twilio_source_phone_number = 'NUMBER'
 
         # Create a Twilio client object instance
         client = Client(twilio_account_sid, twilio_auth_token)
 
         # Send an SMS
         message = client.messages.create(
-            body="This is my SMS message!",
+            body="Хуй",
             from_=twilio_source_phone_number,
             to="+79381424592"
         )
@@ -103,7 +103,10 @@ if __name__ == "__main__":
     parser.add_argument('--source', type=str, default='data/images', help='source')  # file/folder, 0,1,2 for webcam
     opt = parser.parse_args()
 
-    prediction_boxes = detection_function(source="yolov5/videoplayback.avi")
+    sms = Sms_delivery()
+    sms.pull_sms()
+
+    # prediction_boxes = detection_function(source="yolov5/videoplayback.avi")
     # print(prediction_boxes)
     # cam = Camera_work()
     # cam.run_camera("yolov5/videoplayback.mp4")
