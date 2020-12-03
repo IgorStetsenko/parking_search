@@ -118,10 +118,10 @@ def detection_function(source="yolov5/66521.jpg", weights="yolov5s.pt", view_img
             # Print time (inference + NMS)
             print('%sDone. (%.3fs)' % (s, t2 - t1))
 
-            # Stream results
+            # # Stream results
             if view_img:
                 cv2.imshow(str(p), im0)
-                if cv2.waitKey(0) == ord('q'):  # q to quit
+                if cv2.waitKey(10) == ord('q'):  # q to quit
                     raise StopIteration
 
             # Save results (image with detections)
