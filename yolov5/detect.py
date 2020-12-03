@@ -115,8 +115,8 @@ def detection_function(source="yolov5/66521.jpg", weights="yolov5s.pt", view_img
                         points = plot_one_box(xyxy, im0, label=label, color=colors[int(cls)], line_thickness=3)
                         box.append(points)
 
-            # Print time (inference + NMS)
             print('%sDone. (%.3fs)' % (s, t2 - t1))
+            # Print time (inference + NMS)
 
             # # Stream results
             if view_img:
