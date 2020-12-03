@@ -74,39 +74,42 @@ class Data_calculate():
 class Sms_delivery():
 
     def pull_sms(self):
-        '''Doc'''
+        '''The function sms delivery'''
         # Twilio account details
-        twilio_account_sid = 'TWILIO_ACCOUNT_SID'
-        twilio_auth_token = 'TWILIO_AUTH_TOKEN'
-        twilio_source_phone_number = 'NUMBER'
+        twilio_account_sid = ''
+        twilio_auth_token = ''
+        twilio_source_phone_number = '+'
 
         # Create a Twilio client object instance
         client = Client(twilio_account_sid, twilio_auth_token)
 
         # Send an SMS
         message = client.messages.create(
-            body="Хуй",
+            body="Seat is free!!!",
             from_=twilio_source_phone_number,
             to="+79381424592"
         )
 
 
-class Detect():
-    def run_detect(self):
-        '''Doc'''
-        pass
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--weights', nargs='+', type=str, default='yolov5/weights/yolov5s.pt', help='model.pt path(s)')
-    parser.add_argument('--source', type=str, default='data/images', help='source')  # file/folder, 0,1,2 for webcam
+    parser.add_argument('--source', type=str, default='yolov5/66521.jpg', help='source')  # file/folder, 0,1,2 for webcam
     opt = parser.parse_args()
 
-    sms = Sms_delivery()
-    sms.pull_sms()
+    source_image = opt.source
+    if source_image:
+        prediction_boxes = detection_function(source_image)
+        print(prediction_boxes)
+    else:
+        print('error')
+
+    # sms = Sms_delivery()
+    # sms.pull_sms()
 
     # prediction_boxes = detection_function(source="yolov5/videoplayback.avi")
-    # print(prediction_boxes)
+
     # cam = Camera_work()
     # cam.run_camera("yolov5/videoplayback.mp4")
+
+    #main algoritm
