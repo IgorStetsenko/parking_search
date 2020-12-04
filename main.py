@@ -86,7 +86,7 @@ class Sms_delivery():
         message = client.messages.create(
             body="Seat is free!!!",
             from_=twilio_source_phone_number,
-            to="+79381424592"
+            to=""
         )
 
 
