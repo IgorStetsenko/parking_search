@@ -90,7 +90,6 @@ class Sms_delivery():
         )
 
 
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--source', type=str, default='yolov5/66521.jpg', help='source')  # file/folder, 0,1,2 for webcam
