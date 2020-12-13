@@ -11,12 +11,18 @@ from multiprocessing.pool import ThreadPool
 from pathlib import Path
 from threading import Thread
 
+import sys
 import cv2
 import numpy as np
 import torch
 from PIL import Image, ExifTags
 from torch.utils.data import Dataset
 from tqdm import tqdm
+
+
+# sys.path.append('../')
+path_tmp = os.getcwd()
+sys.path.append(path_tmp + "/yolov5/")
 
 from utils.general import xyxy2xywh, xywh2xyxy
 from utils.torch_utils import torch_distributed_zero_first

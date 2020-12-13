@@ -110,7 +110,7 @@ if __name__ == "__main__":
     # sms.pull_sms()
 
     # prediction_boxes = detection_function(source="yolov5/videoplayback.avi")
-    prediction_boxes = detection_function(source="2")
+    prediction_boxes = detection_function(source="0")
 
     # cam = Camera_work()
     # cam.run_camera("yolov5/videoplayback.mp4")
