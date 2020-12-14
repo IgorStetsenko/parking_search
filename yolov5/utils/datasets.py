@@ -20,7 +20,6 @@ from torch.utils.data import Dataset
 from tqdm import tqdm
 
 
-# sys.path.append('../')
 path_tmp = os.getcwd()
 sys.path.append(path_tmp + "/yolov5/")
 

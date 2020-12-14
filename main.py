@@ -91,26 +91,31 @@ class Sms_delivery():
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--source', type=str, default='yolov5/66521.jpg', help='source')  # file/folder, 0,1,2 for webcam
-    opt = parser.parse_args()
+    try:
+        parser = argparse.ArgumentParser()
+        parser.add_argument('--source', type=str, default='yolov5/66521.jpg', help='source')  # file/folder, 0,1,2 for webcam
+        opt = parser.parse_args()
 
-    source_image = opt.source
-
-    if source_image == 'webcam':
         source_image = opt.source
-        # prediction_boxes = detection_function(source_image)   #run video
-        # print(prediction_boxes)
-    elif source_image == 'webcam':
-        pass
-    else:
-        print('error source')
+
+        if source_image == 'webcam':
+            source_image = opt.source
+            # prediction_boxes = detection_function(source_image)   #run video
+            # print(prediction_boxes)
+        elif source_image == 'video':
+            pass
+        else:
+            detection_function(source_image)
+
+    except NameError:
+        print("Give source image, video or stream")
+
 
     # sms = Sms_delivery()
     # sms.pull_sms()
 
     # prediction_boxes = detection_function(source="yolov5/videoplayback.avi")
-    prediction_boxes = detection_function(source="0")
+    # prediction_boxes = detection_function(source_image)
 
     # cam = Camera_work()
     # cam.run_camera("yolov5/videoplayback.mp4")
