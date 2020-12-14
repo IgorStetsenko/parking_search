@@ -39,19 +39,19 @@ class Data_calculate():
 
     def iou_calculate(self, box1, box2):
         """Функция рассчитывает метрику IoU и проверяет пересечение прямоугольников"""
-        flag = True
+        flag = False
         ax1, ay1, ax2, ay2 = box1[0][0], box1[0][1], box1[1][0], box1[1][1]
         bx1, by1, bx2, by2 = box2[0][0], box2[0][1], box2[1][0], box1[1][1]
         if ax1 < bx2 and ax2 > bx1 and ay1 < by2 and ay2 > by1:
-            print("пересекаются")
+            flag = True
             sq_a = abs(ax1 - ax2) * abs(ay1 - ay2)
             sq_b = abs(bx1 - bx2) * abs(by1 - by2)
             interArea = abs(max([ax1, ax2]) - min([bx1, bx2])) * abs(max([ay1, ay2]) - min([by1, by2]))
             iou = interArea / float(abs(abs(sq_a + sq_b) - interArea))
-            return iou
+            return iou, flag
         else:
-            print("не пересекаются")
-            return 0
+            flag = False
+            return flag
 
     def boxes_intersection_search(self, prediction_boxes):
         """This function do boxes intersection search"""
@@ -90,6 +90,7 @@ class Sms_delivery():
         )
 
 
+
 if __name__ == "__main__":
     try:
         parser = argparse.ArgumentParser()
@@ -99,16 +100,30 @@ if __name__ == "__main__":
         source_image = opt.source
 
         if source_image == 'webcam':
-            source_image = opt.source
-            # prediction_boxes = detection_function(source_image)   #run video
-            # print(prediction_boxes)
+            prediction_boxes = detection_function(source_image)   #run video
+            print(prediction_boxes)
         elif source_image == 'video':
             pass
         else:
             detection_function(source_image)
-
+            prediction_boxes = detection_function(source_image)   #run image
+            print(prediction_boxes)
     except NameError:
         print("Give source image, video or stream")
+
+    #main algorithm
+
+    boxes = Data_calculate()
+    boxes_intersection_array = boxes.boxes_intersection_search(prediction_boxes)
+
+
+    print(boxes_intersection_array)
+
+
+
+
+
+
 
 
     # sms = Sms_delivery()
