@@ -94,20 +94,16 @@ class Sms_delivery():
 if __name__ == "__main__":
     try:
         parser = argparse.ArgumentParser()
-        parser.add_argument('--source', type=str, default='yolov5/66521.jpg', help='source')  # file/folder, 0,1,2 for webcam
+        parser.add_argument('--source', type=str, default='yolov5/default_img.jpg', help='source')  # file/folder, 0,1,2 for webcam
         opt = parser.parse_args()
 
         source_image = opt.source
 
-        if source_image == 'webcam':
+        if source_image == '0' or '1' 'or' "2":
             prediction_boxes = detection_function(source_image)   #run video
             print(prediction_boxes)
-        elif source_image == 'video':
-            pass
         else:
-            detection_function(source_image)
-            prediction_boxes = detection_function(source_image)   #run image
-            print(prediction_boxes)
+            prediction_boxes = detection_function(source_image)
     except NameError:
         print("Give source image, video or stream")
 
