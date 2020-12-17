@@ -97,23 +97,23 @@ if __name__ == "__main__":
         parser.add_argument('--source', type=str, default='yolov5/default_img.jpg', help='source')  # file/folder, 0,1,2 for webcam
         opt = parser.parse_args()
 
-        source_image = opt.source
+        # source_image = opt.source
 
-        if source_image == '0' or '1' 'or' "2":
+        if source_image == '0' or '1' or '2':
             prediction_boxes = detection_function(source_image)   #run video
-            print(prediction_boxes)
+            # print(prediction_boxes)
         else:
-            prediction_boxes = detection_function(source_image)
+            prediction_boxes = detection_function('rtsp://170.93.143.139/rtplive/470011e600ef003a004ee33696235daa')
     except NameError:
         print("Give source image, video or stream")
 
     #main algorithm
 
-    boxes = Data_calculate()
-    boxes_intersection_array = boxes.boxes_intersection_search(prediction_boxes)
+    # boxes = Data_calculate()
+    # boxes_intersection_array = boxes.boxes_intersection_search(prediction_boxes)
 
 
-    print(boxes_intersection_array)
+    # print(boxes_intersection_array)
 
 
 
