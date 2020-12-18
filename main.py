@@ -96,12 +96,16 @@ def main_algorithm(prediction_boxes):
     :return:
     """
     temp_parking_seat = []
-    iou=Data_calculate
+    iou=Data_calculate()
     temp_parking_seat = prediction_boxes.copy()
-    print(temp_parking_seat)
+
     for box_original in prediction_boxes:
-        i = 0
-        iou.iou_calculate(box_original, temp_parking_seat[i])
+        i=0
+        temp_parking_seat=temp_parking_seat[i]
+        print(temp_parking_seat,i, '----')
+        print(box_original,i, '---+')
+        iou.iou_calculate(box_original, temp_parking_seat)
+        i+=1
 
     pass
 
