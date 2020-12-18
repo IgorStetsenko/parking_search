@@ -89,6 +89,21 @@ class Sms_delivery():
             to=""
         )
 
+def main_algorithm(prediction_boxes):
+    """
+
+    :param prediction_boxes:
+    :return:
+    """
+    temp_parking_seat = []
+    iou=Data_calculate
+    temp_parking_seat = prediction_boxes.copy()
+    print(temp_parking_seat)
+    for box_original in prediction_boxes:
+        i = 0
+        iou.iou_calculate(box_original, temp_parking_seat[i])
+
+    pass
 
 
 if __name__ == "__main__":
@@ -97,17 +112,21 @@ if __name__ == "__main__":
         parser.add_argument('--source', type=str, default='yolov5/default_img.jpg', help='source')  # file/folder, 0,1,2 for webcam
         opt = parser.parse_args()
 
-        # source_image = opt.source
+        source_image = opt.source
 
         if source_image == '0' or '1' or '2':
             prediction_boxes = detection_function(source_image)   #run video
             # print(prediction_boxes)
+            main_algorithm(prediction_boxes)
         else:
             prediction_boxes = detection_function('rtsp://170.93.143.139/rtplive/470011e600ef003a004ee33696235daa')
+
     except NameError:
         print("Give source image, video or stream")
 
-    #main algorithm
+
+
+
 
     # boxes = Data_calculate()
     # boxes_intersection_array = boxes.boxes_intersection_search(prediction_boxes)
