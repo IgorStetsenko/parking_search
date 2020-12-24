@@ -5,8 +5,6 @@ from yolov5.detect import detection_function
 from twilio.rest import Client
 
 
-
-
 class Camera_work():
 
     def run_camera(self, source):
@@ -34,6 +32,16 @@ class Camera_work():
     def write_video(self):
         '''Doc'''
         pass
+
+    def diff_frame(self, frame1, frame2):
+        '''
+
+        :param frame1:
+        :param frame2:
+        :return:
+        '''
+        diff = cv2.absdiff(frame1, frame2)
+        return diff
 
 class Data_calculate():
 
@@ -70,6 +78,7 @@ class Data_calculate():
             else:
                 print('Error')
 
+
 class Sms_delivery():
 
     def pull_sms(self):
@@ -89,6 +98,7 @@ class Sms_delivery():
             to=""
         )
 
+
 def main_algorithm(prediction_boxes):
     """
 
@@ -96,53 +106,43 @@ def main_algorithm(prediction_boxes):
     :return:
     """
     temp_parking_seat = []
-    iou=Data_calculate()
+    iou = Data_calculate()
     temp_parking_seat = prediction_boxes.copy()
 
     number_box = 0
     for box_original in prediction_boxes:
         #     print(temp_parking_seat[number_box],number_box, '----')
         #     print(box_original,number_box, '---+')
-        print(iou.iou_calculate(box_original, temp_parking_seat[number_box]))
+        num, flag = iou.iou_calculate(box_original, temp_parking_seat[number_box])
+        if
         number_box += 1
-    pass
+        print(flag, num)
 
 
 if __name__ == "__main__":
     try:
         parser = argparse.ArgumentParser()
-        parser.add_argument('--source', type=str, default='yolov5/default_img.jpg', help='source')  # file/folder, 0,1,2 for webcam
+        parser.add_argument('--source', type=str, default='yolov5/default_img.jpg',
+                            help='source')  # file/folder, 0,1,2 for webcam
         opt = parser.parse_args()
 
         source_image = opt.source
 
         if source_image == ('0' or '1' or '2'):
-            prediction_boxes = detection_function(source_image)   #run video
+            prediction_boxes = detection_function(source_image)  # run video
             # print(prediction_boxes)
             main_algorithm(prediction_boxes)
         else:
             prediction_boxes = detection_function(source_image)
-            print(prediction_boxes)
+            main_algorithm(prediction_boxes)
 
     except NameError:
         print("Give source image, video or stream")
 
-
-
-
-
     # boxes = Data_calculate()
     # boxes_intersection_array = boxes.boxes_intersection_search(prediction_boxes)
 
-
     # print(boxes_intersection_array)
-
-
-
-
-
-
-
 
     # sms = Sms_delivery()
     # sms.pull_sms()
@@ -153,4 +153,4 @@ if __name__ == "__main__":
     # cam = Camera_work()
     # cam.run_camera("yolov5/videoplayback.mp4")
 
-    #main algoritm
+    # main algoritm
