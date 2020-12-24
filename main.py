@@ -99,14 +99,12 @@ def main_algorithm(prediction_boxes):
     iou=Data_calculate()
     temp_parking_seat = prediction_boxes.copy()
 
+    number_box = 0
     for box_original in prediction_boxes:
-        i=0
-        temp_parking_seat=temp_parking_seat[i]
-        print(temp_parking_seat,i, '----')
-        print(box_original,i, '---+')
-        iou.iou_calculate(box_original, temp_parking_seat)
-        i+=1
-
+        #     print(temp_parking_seat[number_box],number_box, '----')
+        #     print(box_original,number_box, '---+')
+        print(iou.iou_calculate(box_original, temp_parking_seat[number_box]))
+        number_box += 1
     pass
 
 
@@ -118,12 +116,13 @@ if __name__ == "__main__":
 
         source_image = opt.source
 
-        if source_image == '0' or '1' or '2':
+        if source_image == ('0' or '1' or '2'):
             prediction_boxes = detection_function(source_image)   #run video
             # print(prediction_boxes)
             main_algorithm(prediction_boxes)
         else:
-            prediction_boxes = detection_function('rtsp://170.93.143.139/rtplive/470011e600ef003a004ee33696235daa')
+            prediction_boxes = detection_function(source_image)
+            print(prediction_boxes)
 
     except NameError:
         print("Give source image, video or stream")
