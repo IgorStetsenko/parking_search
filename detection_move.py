@@ -1,6 +1,6 @@
 
 import cv2  # импорт модуля cv2
-
+import numpy as np
 cap = cv2.VideoCapture("yolov5/test2.mp4")
 # cap = cv2.VideoCapture(0)  # видео поток с веб камеры
 
@@ -14,6 +14,8 @@ ret, frame2 = cap.read()
 while cap.isOpened():  # метод isOpened() выводит статус видеопотока
     diff = cv2.absdiff(frame1,
                        frame2)  # нахождение разницы двух кадров, которая проявляется лишь при изменении одного из них, т.е. с этого момента наша программа реагирует на любое движение.
+    # opred = np.linalg.det(diff)
+    print(diff, "+++++++++++++++++++++++++")
     gray = cv2.cvtColor(diff, cv2.COLOR_BGR2GRAY)  # перевод кадров в черно-белую градацию
     blur = cv2.GaussianBlur(gray, (5, 5), 0)  # фильтрация лишних контуров
     _, thresh = cv2.threshold(blur, 20, 255, cv2.THRESH_BINARY)  # метод для выделения кромки объекта белым цветом
