@@ -12,11 +12,73 @@ class Camera_work():
         cap = cv2.VideoCapture(source)
         while True:
             ret, img = cap.read()
-            cv2.imshow("camera", img)
-            if cv2.waitKey(10) == 27:  # Клавиша Esc
+            if ret:
+                cv2.imshow("camera", img)
+            if cv2.waitKey(10) == 27:
+                cap.release()
+                cv2.destroyAllWindows()
+                break
+
+    def detection_move(self, source):
+        """
+
+        :param source:
+        :return:
+        """
+        cap = cv2.VideoCapture(source)
+        cap.set(3, 240)  # установка размера окна
+        cap.set(4, 480)
+        cap.set(cv2.CAP_PROP_FPS, 25)
+
+        ret, frame1 = cap.read()
+        ret, frame2 = cap.read()
+
+        while cap.isOpened():  # метод isOpened() выводит статус видеопотока
+            diff = cv2.absdiff(frame1,
+                               frame2)  # нахождение разницы двух кадров, которая проявляется лишь при изменении одного из них, т.е. с этого момента наша программа реагирует на любое движение.
+            gray = cv2.cvtColor(diff, cv2.COLOR_BGR2GRAY)  # перевод кадров в черно-белую градацию
+            blur = cv2.GaussianBlur(gray, (5, 5), 0)  # фильтрация лишних контуров
+            _, thresh = cv2.threshold(blur, 20, 255,
+                                      cv2.THRESH_BINARY)  # метод для выделения кромки объекта белым цветом
+            dilated = cv2.dilate(thresh, None,
+                                 iterations=3)  # данный метод противоположен методу erosion(), т.е. эрозии объекта, и расширяет выделенную на предыдущем этапе область
+            сontours, _ = cv2.findContours(dilated, cv2.RETR_TREE,
+                                           cv2.CHAIN_APPROX_SIMPLE)  # нахождение массива контурных точек
+            for contour in сontours:
+                (x, y, w, h) = cv2.boundingRect(
+                    contour)  # преобразование массива из предыдущего этапа в кортеж из четырех координат
+
+                # метод contourArea() по заданным contour точкам, здесь кортежу, вычисляет площадь зафиксированного объекта в каждый момент времени, это можно проверить
+                # print(cv2.contourArea(contour))
+
+                if cv2.contourArea(contour) < 700:  # условие при котором площадь выделенного объекта меньше 700 px
+                    continue
+                cv2.rectangle(frame1, (x, y), (x + w, y + h), (0, 255, 0),
+                              2)  # получение прямоугольника из точек кортежа
+                cv2.putText(frame1, "Status: {}".format("Dvigenie"), (10, 20), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255),
+                            3,
+                            cv2.LINE_AA)  # вставляем текст
+
+            cv2.drawContours(frame1, сontours, -1, (0, 0, 255), 2)  # также можно было просто нарисовать контур объекта
+
+            cv2.imshow("frame1", frame1)
+
+            frame1 = frame2  #
+            ret, frame2 = cap.read()  #
+
+            if cv2.waitKey(40) == 27:
                 break
         cap.release()
         cv2.destroyAllWindows()
+
+
+
+
+        #     cv2.imshow("camera", img)
+        #     if cv2.waitKey(10) == 27:  # Клавиша Esc
+        #         break
+        # cap.release()
+        # cv2.destroyAllWindows()
 
     def read_video(self):
         """Doc"""
@@ -42,6 +104,17 @@ class Camera_work():
         '''
         diff = cv2.absdiff(frame1, frame2)
         return diff
+
+    def detection_move(self, ):
+        """
+
+        :param prediction_boxes:
+        :return: move is True or move is False
+
+
+
+
+        """
 
 class Data_calculate():
 
@@ -78,7 +151,6 @@ class Data_calculate():
             else:
                 print('Error')
 
-
 class Sms_delivery():
 
     def pull_sms(self):
@@ -99,24 +171,24 @@ class Sms_delivery():
         )
 
 
-def main_algorithm(prediction_boxes):
-    """
-
-    :param prediction_boxes:
-    :return:
-    """
-    temp_parking_seat = []
-    iou = Data_calculate()
-    temp_parking_seat = prediction_boxes.copy()
-
-    number_box = 0
-    for box_original in prediction_boxes:
-        #     print(temp_parking_seat[number_box],number_box, '----')
-        #     print(box_original,number_box, '---+')
-        num, flag = iou.iou_calculate(box_original, temp_parking_seat[number_box])
-        if
-        number_box += 1
-        print(flag, num)
+# def main_algorithm(prediction_boxes):
+#     """
+#
+#     :param prediction_boxes:
+#     :return:
+#     """
+#     temp_parking_seat = []
+#     iou = Data_calculate()
+#     temp_parking_seat = prediction_boxes.copy()
+#
+#     number_box = 0
+#     for box_original in prediction_boxes:
+#         #     print(temp_parking_seat[number_box],number_box, '----')
+#         #     print(box_original,number_box, '---+')
+#         num, flag = iou.iou_calculate(box_original, temp_parking_seat[number_box])
+#         if
+#         number_box += 1
+#         print(flag, num)
 
 
 if __name__ == "__main__":
@@ -128,13 +200,22 @@ if __name__ == "__main__":
 
         source_image = opt.source
 
-        if source_image == ('0' or '1' or '2'):
-            prediction_boxes = detection_function(source_image)  # run video
-            # print(prediction_boxes)
-            main_algorithm(prediction_boxes)
-        else:
-            prediction_boxes = detection_function(source_image)
-            main_algorithm(prediction_boxes)
+        # if source_image == ('0' or '1' or '2'):
+        #     prediction_boxes = detection_function(source_image)  # run video
+        #     # print(prediction_boxes)
+        #     main_algorithm(prediction_boxes)
+        # else:
+        #     prediction_boxes = detection_function(source_image)
+        #     main_algorithm(prediction_boxes)
+
+
+
+
+        # cam = Camera_work()
+        # ret, img = cam.run_camera("yolov5/test.mp4")
+
+
+
 
     except NameError:
         print("Give source image, video or stream")
