@@ -146,7 +146,7 @@ if __name__ == "__main__":
         cap.set(cv2.CAP_PROP_FPS, 25)
         ret, frame1 = cap.read()
         ret, frame2 = cap.read()
-
+        print(type(frame1))
         while cap.isOpened():  # метод isOpened() выводит статус видеопотока
             frame1 = cv2.rectangle(frame1, (1, 1), (960, 200), (0, 0, 0), -1)
             frame2 = cv2.rectangle(frame2, (1, 1), (960, 200), (0, 0, 0), -1)
@@ -161,7 +161,7 @@ if __name__ == "__main__":
             сontours, _ = cv2.findContours(dilated, cv2.RETR_TREE,
                                            cv2.CHAIN_APPROX_SIMPLE)  # нахождение массива контурных точек
             move_detector =  False if сontours == [] else True
-            print(move_detector)
+            # print(move_detector)
             cv2.imshow("frame1", frame1)
             sleep(0.01)
             frame1 = frame2  #
@@ -169,6 +169,9 @@ if __name__ == "__main__":
 
             if cv2.waitKey(40) == 27:
                 break
+            print(frame1)
+            if move_detector:
+                detection_function(source_image)
 
         cap.release()
         cv2.destroyAllWindows()
