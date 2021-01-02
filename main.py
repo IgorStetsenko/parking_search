@@ -20,44 +20,7 @@ class Camera_work():
                 cv2.destroyAllWindows()
                 break
 
-    def detection_move(self, source):
-        """
-        :param source:
-        :return:
-        """
-        cap = cv2.VideoCapture(source)
-        cap.set(3, 240)  # установка размера окна
-        cap.set(4, 480)
-        cap.set(cv2.CAP_PROP_FPS, 25)
-        ret, frame1 = cap.read()
-        ret, frame2 = cap.read()
-        flag = False
 
-        while cap.isOpened():  # метод isOpened() выводит статус видеопотока
-            frame1 = cv2.rectangle(frame1, (1, 1), (960, 200), (0, 0, 0), -1)
-            frame2 = cv2.rectangle(frame2, (1, 1), (960, 200), (0, 0, 0), -1)
-            diff = cv2.absdiff(frame1,
-                               frame2)  # нахождение разницы двух кадров, которая проявляется лишь при изменении одного из них, т.е. с этого момента наша программа реагирует на любое движение.
-            gray = cv2.cvtColor(diff, cv2.COLOR_BGR2GRAY)  # перевод кадров в черно-белую градацию
-            blur = cv2.GaussianBlur(gray, (5, 5), 0)  # фильтрация лишних контуров
-            _, thresh = cv2.threshold(blur, 20, 255,
-                                      cv2.THRESH_BINARY)  # метод для выделения кромки объекта белым цветом
-            dilated = cv2.dilate(thresh, None,
-                                 iterations=3)  # данный метод противоположен методу erosion(), т.е. эрозии объекта, и расширяет выделенную на предыдущем этапе область
-            сontours, _ = cv2.findContours(dilated, cv2.RETR_TREE,
-                                           cv2.CHAIN_APPROX_SIMPLE)  # нахождение массива контурных точек
-            cv2.imshow("frame1", frame1)
-            sleep(0.1)
-            frame1 = frame2  #
-            ret, frame2 = cap.read()  #
-            if сontours == []:
-                flag = False
-            else:
-                flag = True
-            print(flag)
-            return flag
-        cap.release()
-        cv2.destroyAllWindows()
 
 
 
@@ -175,12 +138,40 @@ if __name__ == "__main__":
         parser.add_argument('--source', type=str, default="yolov5/test2.mp4",
                             help='source')  # file/folder, 0,1,2 for webcam
         opt = parser.parse_args()
-
         source_image = opt.source
+        cap = cv2.VideoCapture(source_image)
+        # cap = cv2.VideoCapture(0)  # видео поток с веб камеры
+        cap.set(3, 240)  # установка размера окна
+        cap.set(4, 480)
+        cap.set(cv2.CAP_PROP_FPS, 25)
+        ret, frame1 = cap.read()
+        ret, frame2 = cap.read()
 
-        move = Camera_work()
-        dviz = move.detection_move(source_image)
-        print(dviz, "+++")
+        while cap.isOpened():  # метод isOpened() выводит статус видеопотока
+            frame1 = cv2.rectangle(frame1, (1, 1), (960, 200), (0, 0, 0), -1)
+            frame2 = cv2.rectangle(frame2, (1, 1), (960, 200), (0, 0, 0), -1)
+            diff = cv2.absdiff(frame1,
+                               frame2)  # нахождение разницы двух кадров, которая проявляется лишь при изменении одного из них, т.е. с этого момента наша программа реагирует на любое движение.
+            gray = cv2.cvtColor(diff, cv2.COLOR_BGR2GRAY)  # перевод кадров в черно-белую градацию
+            blur = cv2.GaussianBlur(gray, (5, 5), 0)  # фильтрация лишних контуров
+            _, thresh = cv2.threshold(blur, 20, 255,
+                                      cv2.THRESH_BINARY)  # метод для выделения кромки объекта белым цветом
+            dilated = cv2.dilate(thresh, None,
+                                 iterations=3)  # данный метод противоположен методу erosion(), т.е. эрозии объекта, и расширяет выделенную на предыдущем этапе область
+            сontours, _ = cv2.findContours(dilated, cv2.RETR_TREE,
+                                           cv2.CHAIN_APPROX_SIMPLE)  # нахождение массива контурных точек
+            move_detector =  False if сontours == [] else True
+            print(move_detector)
+            cv2.imshow("frame1", frame1)
+            sleep(0.01)
+            frame1 = frame2  #
+            ret, frame2 = cap.read()  #
+
+            if cv2.waitKey(40) == 27:
+                break
+
+        cap.release()
+        cv2.destroyAllWindows()
 
         # if dviz:
         #     print("dviz")
