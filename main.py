@@ -22,17 +22,16 @@ class Camera_work():
 
     def detection_move(self, source):
         """
-
         :param source:
         :return:
         """
-
         cap = cv2.VideoCapture(source)
         cap.set(3, 240)  # установка размера окна
         cap.set(4, 480)
         cap.set(cv2.CAP_PROP_FPS, 25)
         ret, frame1 = cap.read()
         ret, frame2 = cap.read()
+        flag = False
 
         while cap.isOpened():  # метод isOpened() выводит статус видеопотока
             frame1 = cv2.rectangle(frame1, (1, 1), (960, 200), (0, 0, 0), -1)
@@ -47,19 +46,19 @@ class Camera_work():
                                  iterations=3)  # данный метод противоположен методу erosion(), т.е. эрозии объекта, и расширяет выделенную на предыдущем этапе область
             сontours, _ = cv2.findContours(dilated, cv2.RETR_TREE,
                                            cv2.CHAIN_APPROX_SIMPLE)  # нахождение массива контурных точек
-            if сontours == []:
-                print("pusto")
-            else:
-                print("dvizenie")
             cv2.imshow("frame1", frame1)
-            sleep(0.01)
+            sleep(0.1)
             frame1 = frame2  #
             ret, frame2 = cap.read()  #
-
-            if cv2.waitKey(40) == 27:
-                break
+            if сontours == []:
+                flag = False
+            else:
+                flag = True
+            print(flag)
+            return flag
         cap.release()
         cv2.destroyAllWindows()
+
 
 
 
@@ -88,16 +87,12 @@ class Camera_work():
         diff = cv2.absdiff(frame1, frame2)
         return diff
 
-    def detection_move(self, ):
-        """
-
-        :param prediction_boxes:
-        :return: move is True or move is False
 
 
 
 
-        """
+
+
 
 class Data_calculate():
 
@@ -177,12 +172,18 @@ class Sms_delivery():
 if __name__ == "__main__":
     try:
         parser = argparse.ArgumentParser()
-        parser.add_argument('--source', type=str, default='yolov5/default_img.jpg',
+        parser.add_argument('--source', type=str, default='yolov5/test2.mp4',
                             help='source')  # file/folder, 0,1,2 for webcam
         opt = parser.parse_args()
 
         source_image = opt.source
 
+        move = Camera_work()
+        dviz = move.detection_move(source_image)
+        print(dviz)
+
+        # if dviz:
+        #     print("dviz")
         # if source_image == ('0' or '1' or '2'):
         #     prediction_boxes = detection_function(source_image)  # run video
         #     # print(prediction_boxes)
