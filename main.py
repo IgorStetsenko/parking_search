@@ -172,7 +172,7 @@ class Sms_delivery():
 if __name__ == "__main__":
     try:
         parser = argparse.ArgumentParser()
-        parser.add_argument('--source', type=str, default='yolov5/test2.mp4',
+        parser.add_argument('--source', type=str, default="yolov5/test2.mp4",
                             help='source')  # file/folder, 0,1,2 for webcam
         opt = parser.parse_args()
 
@@ -180,7 +180,7 @@ if __name__ == "__main__":
 
         move = Camera_work()
         dviz = move.detection_move(source_image)
-        print(dviz)
+        print(dviz, "+++")
 
         # if dviz:
         #     print("dviz")
