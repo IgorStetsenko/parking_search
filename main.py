@@ -123,10 +123,10 @@ class Frame_utils():
         contour_area = 0
         flag = False
         for contour in сontours:
-            (x, y, w, h) = cv2.boundingRect(
-                contour)  # преобразование массива из предыдущего этапа в кортеж из четырех координат
+            # (x, y, w, h) = cv2.boundingRect(contour)  # преобразование массива из предыдущего этапа в кортеж из четырех координат
             # метод contourArea() по заданным contour точкам, здесь кортежу,
             # вычисляет площадь зафиксированного объекта в каждый момент времени, это можно проверить
+            #
             # print(cv2.contourArea(contour))
             contour_area = cv2.contourArea(contour)
             if contour_area<500:  # условие при котором площадь выделенного объекта меньше 700 px
@@ -201,7 +201,7 @@ if __name__ == "__main__":
                 cap.release()
                 cv2.destroyAllWindows()
                 print(contours_filter,contour_area)
-                prediction_boxes = detection_function(source_image, stop_detection)
+                prediction_boxes = detection_function(source = frame2)
             else:
                 sleep(0.001)
                 print("пауза")
