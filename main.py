@@ -120,16 +120,19 @@ class Frame_utils():
         :param contours:
         :return:
         """
+        contour_area = 0
         flag = False
         for contour in сontours:
             (x, y, w, h) = cv2.boundingRect(
                 contour)  # преобразование массива из предыдущего этапа в кортеж из четырех координат
-            # метод contourArea() по заданным contour точкам, здесь кортежу, вычисляет площадь зафиксированного объекта в каждый момент времени, это можно проверить
+            # метод contourArea() по заданным contour точкам, здесь кортежу,
+            # вычисляет площадь зафиксированного объекта в каждый момент времени, это можно проверить
             # print(cv2.contourArea(contour))
-            if cv2.contourArea(contour) < 700:  # условие при котором площадь выделенного объекта меньше 700 px
+            contour_area = cv2.contourArea(contour)
+            if contour_area<500:  # условие при котором площадь выделенного объекта меньше 700 px
                 flag = True
 
-        return flag
+        return flag, contour_area
 
 
 
@@ -168,6 +171,7 @@ if __name__ == "__main__":
         cap.set(cv2.CAP_PROP_FPS, 25)
         ret, frame1 = cap.read()
         ret, frame2 = cap.read()
+        stop_detection = True
         move_detector = Frame_utils()
         while cap.isOpened():  # метод isOpened() выводит статус видеопотока
             frame1 = cv2.rectangle(frame1, (1, 1), (960, 200), (0, 0, 0), -1)
@@ -182,25 +186,25 @@ if __name__ == "__main__":
                                  iterations=3)  # данный метод противоположен методу erosion(), т.е. эрозии объекта, и расширяет выделенную на предыдущем этапе область
             сontours, _ = cv2.findContours(dilated, cv2.RETR_TREE,
                                            cv2.CHAIN_APPROX_SIMPLE)  # нахождение массива контурных точек
-            contours_filter = move_detector.contours_search_and_filter(сontours)
+            contours_filter, contour_area = move_detector.contours_search_and_filter(сontours)
 
-            print(contours_filter)
+            print(contours_filter, contour_area)
+            stop_detection = [True if contours_filter else False]
             # cv2.imshow("frame1", frame1)
             #
             sleep(0.01)
             frame1 = frame2  #
             ret, frame2 = cap.read()  #
-
             if cv2.waitKey(40) == 27:
                 break
-            if contours_filter:
+            if contours_filter and stop_detection:
                 cap.release()
                 cv2.destroyAllWindows()
-                prediction_boxes = detection_function(source_image)
+                print(contours_filter,contour_area)
+                prediction_boxes = detection_function(source_image, stop_detection)
             else:
-                sleep(1)
+                sleep(0.001)
                 print("пауза")
-
         cap.release()
         cv2.destroyAllWindows()
 

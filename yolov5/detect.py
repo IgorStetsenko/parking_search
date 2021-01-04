@@ -1,12 +1,11 @@
 import argparse
 import time
+import sys
 from pathlib import Path
-
 import cv2
 import torch
 import torch.backends.cudnn as cudnn
 from numpy import random
-
 from models.experimental import attempt_load
 from utils.datasets import LoadStreams, LoadImages
 from utils.general import check_img_size, non_max_suppression, apply_classifier, scale_coords, xyxy2xywh, \
@@ -15,10 +14,11 @@ from utils.plots import plot_one_box
 from utils.torch_utils import select_device, load_classifier, time_synchronized
 
 
-def detection_function(source="yolov5/66521.jpg", weights="yolov5s.pt", view_img='store_true', save_txt=False,
+def detection_function( source="yolov5/66521.jpg",stop_detection=True,weights="yolov5s.pt", view_img='store_true', save_txt=False,
                        imgsz=640, save_img=False):
     """The main detection function"""
     box = []
+    stop_detection = True
 
     webcam = source.isnumeric() or source.endswith('.txt') or source.lower().startswith(
         ('rtsp://', 'rtmp://', 'http://'))
@@ -35,6 +35,9 @@ def detection_function(source="yolov5/66521.jpg", weights="yolov5s.pt", view_img
     # Load model
     model = attempt_load(weights, map_location=device)  # load FP32 model
     imgsz = check_img_size(imgsz, s=model.stride.max())  # check img_size
+
+    if not stop_detection:
+        sys.exit("The player doesn't want to play again")
     if half:
         model.half()  # to FP16
 
@@ -120,6 +123,7 @@ def detection_function(source="yolov5/66521.jpg", weights="yolov5s.pt", view_img
 
             # # Stream results
             if view_img:
+                im0 = cv2.rectangle(im0, (1, 1), (960, 200), (0, 0, 0), -1)
                 cv2.imshow(str(p), im0)
                 if cv2.waitKey(1) == ord('q'):  # q to quit
                     raise StopIteration
