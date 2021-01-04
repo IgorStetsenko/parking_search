@@ -5,6 +5,16 @@ from yolov5.detect import detection_function
 from twilio.rest import Client
 from time import sleep
 
+class Setting_camera():
+    """
+    """
+    def objects_square_calculate(self, boxes):
+        """
+
+        :param boxes:
+        :return:
+        """
+        pass
 
 class Camera_work():
 
