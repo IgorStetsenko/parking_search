@@ -14,14 +14,14 @@ from utils.plots import plot_one_box
 from utils.torch_utils import select_device, load_classifier, time_synchronized
 
 
-def detection_function(source="yolov5/66521.jpg",stop_detection=True,weights="yolov5s.pt", view_img='store_true', save_txt=False,
+def detection_function(source,stop_detection=True,weights="yolov5s.pt", view_img='store_true', save_txt=False,
                        imgsz=640, save_img=False):
     """The main detection function"""
     box = []
     stop_detection = True
-
-    webcam = source.isnumeric() or source.endswith('.txt') or source.lower().startswith(
-        ('rtsp://', 'rtmp://', 'http://'))
+    print(type(source), "type____")
+    # webcam = source.isnumeric() or source.endswith('.txt') or source.lower().startswith(
+    #     ('rtsp://', 'rtmp://', 'http://'))
 
     # Directories
     save_dir = Path(increment_path(Path("runs/detect") / 'exp', exist_ok='store_true'))  # increment run
@@ -47,12 +47,12 @@ def detection_function(source="yolov5/66521.jpg",stop_detection=True,weights="yo
         modelc = load_classifier(name='resnet101', n=2)  # initialize
         modelc.load_state_dict(torch.load('weights/resnet101.pt', map_location=device)['model']).to(device).eval()
 
-    # Set Dataloader
-    vid_path, vid_writer = None, None
-    if webcam:
-        view_img = True
-        cudnn.benchmark = True  # set True to speed up constant image size inference
-        dataset = LoadStreams(source, img_size=imgsz)
+    # # Set Dataloader
+    # vid_path, vid_writer = None, None
+    # if webcam:
+    #     view_img = True
+    #     cudnn.benchmark = True  # set True to speed up constant image size inference
+    #     dataset = LoadStreams(source, img_size=imgsz)
     else:
         save_img = True
         dataset = LoadImages(source, img_size=imgsz)
