@@ -1,7 +1,7 @@
 import cv2
 import argparse
 from yolov5.utils.datasets import LoadImages
-from yolov5.detect import detection_function
+from yolov5.detect import *
 from twilio.rest import Client
 from time import sleep
 
@@ -173,6 +173,7 @@ if __name__ == "__main__":
         ret, frame2 = cap.read()
         stop_detection = True
         move_detector = Frame_utils()
+        model, half, device = initialize_and_load_model()
         while cap.isOpened():  # метод isOpened() выводит статус видеопотока
             frame1 = cv2.rectangle(frame1, (1, 1), (960, 200), (0, 0, 0), -1)
             frame2 = cv2.rectangle(frame2, (1, 1), (960, 200), (0, 0, 0), -1)
@@ -201,7 +202,8 @@ if __name__ == "__main__":
                 cap.release()
                 cv2.destroyAllWindows()
                 print(contours_filter,contour_area)
-                prediction_boxes = detection_function(frame2)
+                prediction_boxes = detection_function(frame2, model, device, half)
+
             else:
                 sleep(0.001)
                 print("пауза")
