@@ -175,7 +175,7 @@ if __name__ == "__main__":
         move_detector = Frame_utils()
         cam_work = Camera_work()
         model, half, device = initialize_and_load_model()
-        while cap.isOpened():  # метод isOpened() выводит статус видеопотока
+        while True:  # метод isOpened() выводит статус видеопотока
             frame1 = cv2.rectangle(frame1, (1, 1), (960, 200), (0, 0, 0), -1)
             frame2 = cv2.rectangle(frame2, (1, 1), (960, 200), (0, 0, 0), -1)
             diff = cv2.absdiff(frame1,
@@ -200,16 +200,17 @@ if __name__ == "__main__":
             if cv2.waitKey(40) == 27:
                 break
             if contours_filter and stop_detection:
-                cap.release()
-                cv2.destroyAllWindows()
+                # cap.release()
+                # cv2.destroyAllWindows()
                 print(contours_filter,contour_area)
                 frame2 = cv2.rectangle(frame2, (1, 1), (960, 200), (0, 0, 0), -1)
                 prediction_boxes = detection_function(frame2, model, device, half)
                 for i in prediction_boxes:
-                    cv2.rectangle(frame2, i[0], i[1], (255, 0, 0), -1)
-                cam_work.image_show(frame2)
+                    cv2.rectangle(frame2, i[0], i[1], (255, 0, 0), 2)
+                # cam_work.image_show(frame2)
 
-                # print(prediction_boxes, "prediction_boxes")
+                print(prediction_boxes, "prediction_boxes")
+
 
             else:
                 sleep(0.001)
