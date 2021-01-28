@@ -136,27 +136,6 @@ class Frame_utils():
 
 
 
-
-# def main_algorithm(prediction_boxes):
-#     """
-#
-#     :param prediction_boxes:
-#     :return:
-#     """
-#     temp_parking_seat = []
-#     iou = Data_calculate()
-#     temp_parking_seat = prediction_boxes.copy()
-#
-#     number_box = 0
-#     for box_original in prediction_boxes:
-#         #     print(temp_parking_seat[number_box],number_box, '----')
-#         #     print(box_original,number_box, '---+')
-#         num, flag = iou.iou_calculate(box_original, temp_parking_seat[number_box])
-#         if
-#         number_box += 1
-#         print(flag, num)
-
-
 if __name__ == "__main__":
     try:
         parser = argparse.ArgumentParser()
@@ -174,7 +153,7 @@ if __name__ == "__main__":
         stop_detection = True
         move_detector = Frame_utils()
         cam_work = Camera_work()
-        model, half, device = initialize_and_load_model()
+        model, half, device = initialize_model_parameters()
         while True:  # метод isOpened() выводит статус видеопотока
             frame1 = cv2.rectangle(frame1, (1, 1), (960, 200), (0, 0, 0), -1)
             frame2 = cv2.rectangle(frame2, (1, 1), (960, 200), (0, 0, 0), -1)
@@ -193,15 +172,15 @@ if __name__ == "__main__":
             print(contours_filter, contour_area)
             stop_detection = [True if contours_filter else False]
             #cv2.imshow("frame1", frame1)
-            #
             sleep(0.01)
-            frame1 = frame2  #
-            ret, frame2 = cap.read()  #
+            frame1 = frame2
+            ret, frame2 = cap.read()
             if cv2.waitKey(40) == 27:
+                cap.release()
+                cv2.destroyAllWindows()
                 break
             if contours_filter and stop_detection:
-                # cap.release()
-                # cv2.destroyAllWindows()
+
                 print(contours_filter,contour_area)
                 frame2 = cv2.rectangle(frame2, (1, 1), (960, 200), (0, 0, 0), -1)
                 prediction_boxes = detection_function(frame2, model, device, half)
@@ -211,31 +190,11 @@ if __name__ == "__main__":
 
                 print(prediction_boxes, "prediction_boxes")
 
-
             else:
                 sleep(0.001)
                 print("пауза")
         cap.release()
         cv2.destroyAllWindows()
-
-        # if dviz:
-        #     print("dviz")
-        # if source_image == ('0' or '1' or '2'):
-        #     prediction_boxes = detection_function(source_image)  # run video
-        #     # print(prediction_boxes)
-        #     main_algorithm(prediction_boxes)
-        # else:
-        #     prediction_boxes = detection_function(source_image)
-        #     main_algorithm(prediction_boxes)
-
-
-
-
-        # cam = Camera_work()
-        # ret, img = cam.run_camera("yolov5/test.mp4")
-
-
-
 
     except NameError:
         print("Give source image, video or stream")
