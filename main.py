@@ -191,7 +191,7 @@ if __name__ == "__main__":
 
             print(contours_filter, contour_area)
             stop_detection = [True if contours_filter else False]
-            cv2.imshow("frame1", frame1)
+            # cv2.imshow("frame1", frame1)
             #
             sleep(0.01)
             frame1 = frame2  #
@@ -203,6 +203,8 @@ if __name__ == "__main__":
                 cv2.destroyAllWindows()
                 print(contours_filter,contour_area)
                 prediction_boxes = detection_function(frame2, model, device, half)
+
+                print(prediction_boxes, "prediction_boxes")
 
             else:
                 sleep(0.001)
