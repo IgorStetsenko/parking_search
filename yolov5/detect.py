@@ -21,13 +21,6 @@ def detection_function(frame, source="yolov5/66521.jpg", stop_detection=True, vi
     """The main detection function"""
     box = []
     weights = "yolov5/yolov5s.pt"
-    stop_detection = True
-    print(type(source), "type____")
-    # webcam = source.isnumeric() or source.endswith('.txt') or source.lower().startswith(
-    #      ('rtsp://', 'rtmp://', 'http://'))
-
-    #dataset = LoadImages(source, img_size=imgsz)
-
     # Directories
     save_dir = Path(increment_path(Path("runs/detect") / 'exp', exist_ok='store_true'))  # increment run
     (save_dir / 'labels' if save_txt else save_dir).mkdir(parents=True, exist_ok=True)  # make dir
@@ -62,10 +55,6 @@ def detection_function(frame, source="yolov5/66521.jpg", stop_detection=True, vi
     print(img.ndimension(), "++++")
     if img.ndimension() == 3:
         img = img.unsqueeze(0)
-
-        # Inference
-        # t1 = time_synchronized()
-
         pred = model(img, augment=False)[0]
 
         # Apply NMS
@@ -74,9 +63,6 @@ def detection_function(frame, source="yolov5/66521.jpg", stop_detection=True, vi
 
     # Process detections
     for i, det in enumerate(pred):  # detections per image
-        # save_path = str(save_dir / p.name)
-        # txt_path = str(save_dir / 'labels' / p.stem) + ('_%g' % dataset.frame if dataset.mode == 'video' else '')
-        # s += '%gx%g ' % img.shape[2:]  # print string
         gn = torch.tensor(img0.shape)[[1, 0, 1, 0]]  # normalization gain whwh
         if len(det):
             # Rescale boxes from img_size to im0 size
@@ -84,12 +70,8 @@ def detection_function(frame, source="yolov5/66521.jpg", stop_detection=True, vi
 
             # Write results
             for *xyxy, conf, cls in reversed(det):
-                if save_txt:  # Write to file
-                    xywh = (xyxy2xywh(torch.tensor(xyxy).view(1, 4)) / gn).view(-1).tolist()  # normalized xywh
-                    # line = (cls, *xywh, conf) if opt.save_conf else (cls, *xywh)  # label format
-
-                    points = plot_one_box(xyxy, img0, color=colors[int(cls)], line_thickness=3)
-                    box.append(points)
+                points = plot_one_box(xyxy, img0, color=colors[int(cls)], line_thickness=3)
+                box.append(points)
     return box
 
 

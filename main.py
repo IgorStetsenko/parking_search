@@ -32,8 +32,8 @@ class Camera_work():
 
     def image_show(self, image):
         cv2.imshow("image, bitch", image)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
+        # cv2.waitKey(0)
+        # cv2.destroyAllWindows()
 
     def read_video(self):
         """Doc"""
@@ -186,7 +186,7 @@ if __name__ == "__main__":
                 prediction_boxes = detection_function(frame2, model, device, half)
                 for i in prediction_boxes:
                     cv2.rectangle(frame2, i[0], i[1], (255, 0, 0), 2)
-                # cam_work.image_show(frame2)
+                    cam_work.image_show(frame2)
 
                 print(prediction_boxes, "prediction_boxes")
 
