@@ -115,13 +115,27 @@ class Sms_delivery():
         )
 
 class Frame_utils():
-    def contours_search_and_filter(self, contours):
+    def contours_search_and_filter(self,frame1,frame2):
         """
+        :param frame2:
+        :param frame1:
         :param contours:
         :return:
         """
+
         contour_area = 0
         flag = False
+        diff = cv2.absdiff(frame1,
+                           frame2)  # нахождение разницы двух кадров, которая проявляется лишь при изменении одного из них, т.е. с этого момента наша программа реагирует на любое движение.
+        gray = cv2.cvtColor(diff, cv2.COLOR_BGR2GRAY)  # перевод кадров в черно-белую градацию
+        blur = cv2.GaussianBlur(gray, (5, 5), 0)  # фильтрация лишних контуров
+        _, thresh = cv2.threshold(blur, 20, 255,
+                                  cv2.THRESH_BINARY)  # метод для выделения кромки объекта белым цветом
+        dilated = cv2.dilate(thresh, None,
+                             iterations=3)  # данный метод противоположен методу erosion(), т.е. эрозии объекта, и расширяет выделенную на предыдущем этапе область
+        сontours, _ = cv2.findContours(dilated, cv2.RETR_TREE,
+                                       cv2.CHAIN_APPROX_SIMPLE)  # нахождение массива контурных точек
+
         for contour in сontours:
             # (x, y, w, h) = cv2.boundingRect(contour)  # преобразование массива из предыдущего этапа в кортеж из четырех координат
             # метод contourArea() по заданным contour точкам, здесь кортежу,
@@ -155,22 +169,15 @@ if __name__ == "__main__":
         cam_work = Camera_work()
         model, half, device = initialize_model_parameters()
         while True:  # метод isOpened() выводит статус видеопотока
-            frame1 = cv2.rectangle(frame1, (1, 1), (960, 200), (0, 0, 0), -1)
+            frame1 = cv2.rectangle(frame1, (1, 1), (960, 200), (0, 0, 0), -1) #Временное решение
             frame2 = cv2.rectangle(frame2, (1, 1), (960, 200), (0, 0, 0), -1)
-            diff = cv2.absdiff(frame1,
-                               frame2)  # нахождение разницы двух кадров, которая проявляется лишь при изменении одного из них, т.е. с этого момента наша программа реагирует на любое движение.
-            gray = cv2.cvtColor(diff, cv2.COLOR_BGR2GRAY)  # перевод кадров в черно-белую градацию
-            blur = cv2.GaussianBlur(gray, (5, 5), 0)  # фильтрация лишних контуров
-            _, thresh = cv2.threshold(blur, 20, 255,
-                                      cv2.THRESH_BINARY)  # метод для выделения кромки объекта белым цветом
-            dilated = cv2.dilate(thresh, None,
-                                 iterations=3)  # данный метод противоположен методу erosion(), т.е. эрозии объекта, и расширяет выделенную на предыдущем этапе область
-            сontours, _ = cv2.findContours(dilated, cv2.RETR_TREE,
-                                           cv2.CHAIN_APPROX_SIMPLE)  # нахождение массива контурных точек
-            contours_filter, contour_area = move_detector.contours_search_and_filter(сontours)
+
+            contours_filter, contour_area = move_detector.contours_search_and_filter(frame1,frame2)
 
             print(contours_filter, contour_area)
             stop_detection = [True if contours_filter else False]
+
+
             #cv2.imshow("frame1", frame1)
             sleep(0.01)
             frame1 = frame2
