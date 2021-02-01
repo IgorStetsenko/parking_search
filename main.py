@@ -119,7 +119,6 @@ class Frame_utils():
         """
         :param frame2:
         :param frame1:
-        :param contours:
         :return:
         """
 
@@ -167,7 +166,7 @@ if __name__ == "__main__":
         stop_detection = True
         move_detector = Frame_utils()
         cam_work = Camera_work()
-        model, half, device = initialize_model_parameters()
+
         while True:  # метод isOpened() выводит статус видеопотока
             frame1 = cv2.rectangle(frame1, (1, 1), (960, 200), (0, 0, 0), -1) #Временное решение
             frame2 = cv2.rectangle(frame2, (1, 1), (960, 200), (0, 0, 0), -1)
@@ -190,7 +189,7 @@ if __name__ == "__main__":
 
                 print(contours_filter,contour_area)
                 frame2 = cv2.rectangle(frame2, (1, 1), (960, 200), (0, 0, 0), -1)
-                prediction_boxes = detection_function(frame2, model, device, half)
+                prediction_boxes = detection_function(frame2)
                 for i in prediction_boxes:
                     cv2.rectangle(frame2, i[0], i[1], (255, 0, 0), 2)
                     cam_work.image_show(frame2)

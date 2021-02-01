@@ -14,12 +14,11 @@ from utils.plots import plot_one_box
 from utils.torch_utils import select_device, load_classifier, time_synchronized
 from yolov5.utils.datasets import *
 
-
-
 def detection_function(frame, source="yolov5/66521.jpg", stop_detection=True, view_img='store_true', save_txt=True,
                        imgsz=640, save_img=False):
     """The main detection function"""
     box = []
+    model, half, device = initialize_model_parameters()
     weights = "yolov5/yolov5s.pt"
     # Directories
     save_dir = Path(increment_path(Path("runs/detect") / 'exp', exist_ok='store_true'))  # increment run
