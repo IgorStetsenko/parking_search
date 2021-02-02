@@ -18,7 +18,6 @@ def detection_function(frame, source="yolov5/66521.jpg", stop_detection=True, vi
                        imgsz=640, save_img=False):
     """The main detection function"""
     box = []
-    model, half, device = initialize_model_parameters()
     weights = "yolov5/yolov5s.pt"
     # Directories
     save_dir = Path(increment_path(Path("runs/detect") / 'exp', exist_ok='store_true'))  # increment run
@@ -72,20 +71,3 @@ def detection_function(frame, source="yolov5/66521.jpg", stop_detection=True, vi
                 points = plot_one_box(xyxy, img0, color=colors[int(cls)], line_thickness=3)
                 box.append(points)
     return box
-
-
-def initialize_model_parameters(device='', out='inference/output', half='store_true',
-                              weights='yolov5/weights/yolov5s.pt'):
-    # Initialize
-    device = select_device(device)
-    if os.path.exists(out):
-        shutil.rmtree(out)  # delete output folder
-    os.makedirs(out)  # make new output folder
-    # Load model
-    model = torch.load(weights, map_location=device)['model']
-    model.to(device).eval()
-    # Half precision
-    half = half and device.type != 'cpu'  # half precision only supported on CUDA
-    if half:
-        model.half()
-    return model, half, device
