@@ -142,6 +142,7 @@ class Frame_utils():
             #
             # print(cv2.contourArea(contour))
             contour_area = cv2.contourArea(contour)
+            print(contour_area, "123111")
             if contour_area<500:  # условие при котором площадь выделенного объекта меньше 700 px
                 flag = True
 
@@ -192,7 +193,7 @@ if __name__ == "__main__":
                 prediction_boxes = detection_function(frame2)
                 for i in prediction_boxes:
                     cv2.rectangle(frame2, i[0], i[1], (255, 0, 0), 2)
-                    cam_work.image_show(frame2)
+                cam_work.image_show(frame2)
 
                 print(prediction_boxes, "prediction_boxes")
 
