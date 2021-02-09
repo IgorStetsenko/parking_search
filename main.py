@@ -134,15 +134,18 @@ class Frame_utils():
                              iterations=3)  # данный метод противоположен методу erosion(), т.е. эрозии объекта, и расширяет выделенную на предыдущем этапе область
         сontours, _ = cv2.findContours(dilated, cv2.RETR_TREE,
                                        cv2.CHAIN_APPROX_SIMPLE)  # нахождение массива контурных точек
-        print(сontours, "contour")
-
-
+        #print(сontours, "contour")
+        cv2.drawContours(frame1, сontours, -1, (0, 255, 0), 2) #также можно было просто нарисовать контур объекта
+        cv2.imshow("image, bitch", frame2)
+        cv2.waitKey(1000)
+        cv2.destroyAllWindows()
         for contour in сontours:
             # (x, y, w, h) = cv2.boundingRect(contour)  # преобразование массива из предыдущего этапа в кортеж из четырех координат
             # метод contourArea() по заданным contour точкам, здесь кортежу,
             # вычисляет площадь зафиксированного объекта в каждый момент времени, это можно проверить
             #
             contour_area = cv2.contourArea(contour)
+            print(contour_area, "contour_area")
             if contour_area>500:  # условие при котором площадь выделенного объекта меньше 700 px
                 flag = True
 
