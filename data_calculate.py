@@ -36,39 +36,30 @@ class Data_calculate():
             else:
                 print('Error')
 
-    def contours_search_and_filter(self, frame1, frame2, draw=False):
+    def contours_search_and_filter(self, frame1, frame2, draw=True):
         """
-        :param frame2:
-        :param frame1:
-        :return:
+        Frame contours search and filter function. If
+        return: flag (True or False)
         """
-
-        contour_area = 0
-        flag = False
+        contour_area = 0  #
         diff = cv2.absdiff(frame1,
-                           frame2)  # нахождение разницы двух кадров, которая проявляется лишь при изменении одного из них, т.е. с этого момента наша программа реагирует на любое движение.
-        gray = cv2.cvtColor(diff, cv2.COLOR_BGR2GRAY)  # перевод кадров в черно-белую градацию
-        blur = cv2.GaussianBlur(gray, (5, 5), 0)  # фильтрация лишних контуров
-        _, thresh = cv2.threshold(blur, 20, 255,
-                                  cv2.THRESH_BINARY)  # метод для выделения кромки объекта белым цветом
-        dilated = cv2.dilate(thresh, None,
-                             iterations=3)  # данный метод противоположен методу erosion(), т.е. эрозии объекта, и расширяет выделенную на предыдущем этапе область
-
-        сontours, _ = cv2.findContours(dilated, cv2.RETR_TREE,
-                                       cv2.CHAIN_APPROX_SIMPLE)  # нахождение массива контурных точек
-        # print(diff, "contour")
-        if draw:
-            cv2.drawContours(frame2, сontours, -1, (0, 255, 0), 2)  # также можно было просто нарисовать контур объекта
-            cv2.imshow("image, bitch", frame2)
-            cv2.waitKey(1)
-            # cv2.destroyAllWindows()
-        for contour in сontours:
-            # (x, y, w, h) = cv2.boundingRect(contour)  # преобразование массива из предыдущего этапа в кортеж из четырех координат
-            # метод contourArea() по заданным contour точкам, здесь кортежу,
-            # вычисляет площадь зафиксированного объекта в каждый момент времени, это можно проверить
-            #
-            contour_area = cv2.contourArea(contour)
-            if contour_area > 500:  # условие при котором площадь выделенного объекта меньше 700 px
+                           frame2)  # Subtraction function the frame1 and frame2
+        gray = cv2.cvtColor(diff, cv2.COLOR_BGR2GRAY)  # Frame to grayscale
+        blur = cv2.GaussianBlur(gray, (5, 5), 0)  # Contours filtration
+        _, thresh = cv2.threshold(blur, 20, 255, cv2.THRESH_BINARY)  # Draw white contours
+        dilated = cv2.dilate(thresh, None, iterations=3)  # Contours delate
+        contours, _ = cv2.findContours(dilated, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)  # Contours search
+        # if draw:
+        #     cv2.drawContours(frame2, contours, -1, (0, 255, 0), 2)  # Draw contours
+        #     cv2.imshow("image, bitch", frame2)
+        #     cv2.waitKey(100)
+        for contour in contours:
+            flag = False  # Motion is none
+            contour_area = int(cv2.contourArea(contour))
+            if contour_area >= 5000:  # условие при котором площадь выделенного объекта меньше 1000 px
                 flag = True
-
+                print(flag, contour_area)
+                cv2.drawContours(frame2, contours, -1, (0, 255, 0), 2)  # Draw contours
+                cv2.imshow("image, bitch", frame2)
+                cv2.waitKey(0)
         return flag, contour_area

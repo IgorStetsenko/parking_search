@@ -14,17 +14,16 @@ if __name__ == "__main__":  # main program algorithm
         parser.add_argument('--source', type=str, default="yolov5/test2.mp4",
                             help='source')  # file/folder, 0,1,2 for webcam
         opt = parser.parse_args()  # parse terminal
-
         source_file = opt.source
         cap = cv2.VideoCapture(source_file)
         Setting_camera().set_cap(cap)  # set camera
 
         while True:
-            ret, frame1 = cap.read()  # frame1, frame2 - два соседних кадра
+            ret, frame1 = cap.read()
             ret2, frame2 = cap.read()
 
             move_detector, contour_area = Data_calculate().contours_search_and_filter(frame1, frame2)
-            print(move_detector,contour_area)
+
 
         cap.release()
         cv2.destroyAllWindows()
