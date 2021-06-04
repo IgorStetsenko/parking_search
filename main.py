@@ -23,8 +23,8 @@ if __name__ == "__main__":  # main program algorithm
             ret, frame1 = cap.read()  # frame1, frame2 - два соседних кадра
             ret2, frame2 = cap.read()
 
-            move_detector, contour_area = Data_calculate().contours_search_and_filter(frame1, frame1)
-            # print(move_detector,contour_area)
+            move_detector, contour_area = Data_calculate().contours_search_and_filter(frame1, frame2)
+            print(move_detector,contour_area)
 
         cap.release()
         cv2.destroyAllWindows()
