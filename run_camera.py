@@ -2,14 +2,17 @@ import cv2
 
 class Setting_camera():
     """
+    Set camera class
     """
-    def objects_square_calculate(self, boxes):
+    def set_cap(self, cap):
         """
-
-        :param boxes:
-        :return:
+        imput: cap
+        :return: set cap
         """
-        pass
+        cap.set(3, 240)  # size window set
+        cap.set(4, 480)
+        cap.set(cv2.CAP_PROP_FPS, 25)
+        return cap
 
 class Camera_work():
 

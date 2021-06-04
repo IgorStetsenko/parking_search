@@ -1,27 +1,37 @@
 import cv2
 import argparse
+import run_recognition
 
 from run_camera import Camera_work
 from time import sleep
 
+from run_camera import Setting_camera
 
-if __name__ == "__main__":
+
+
+
+if __name__ == "__main__":  # main program algorithm
     try:
         parser = argparse.ArgumentParser()
         parser.add_argument('--source', type=str, default="yolov5/test2.mp4",
                             help='source')  # file/folder, 0,1,2 for webcam
-        opt = parser.parse_args()
-        camera = cv2.VideoCapture(0)
+        opt = parser.parse_args()  # parse terminal
 
-        camera = Camera_work()
-        img = camera.run_video(opt.source)
+        source_file = opt.source
+        cap = cv2.VideoCapture(source_file)
+        #rrr = Setting_camera()
+        Setting_camera().set_cap(cap)
+
+
+        ret, frame1 = cap.read()
+        ret2, frame2 = cap.read()
+
+
+
+
 
     except NameError:
         print("Give source image, video or stream")
-
-
-
-
 
         #
         # source_image = opt.source
@@ -63,8 +73,6 @@ if __name__ == "__main__":
         #         print("пауза")
         # cap.release()
         # cv2.destroyAllWindows()
-
-
 
     # boxes = Data_calculate()
     # boxes_intersection_array = boxes.boxes_intersection_search(prediction_boxes)
