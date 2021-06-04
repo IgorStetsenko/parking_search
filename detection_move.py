@@ -2,7 +2,7 @@ import cv2  # импорт модуля cv2
 import numpy as np
 from time import sleep
 
-def govno():
+def run_detection():
     cap = cv2.VideoCapture("yolov5/test2.mp4")
     # cap = cv2.VideoCapture(0)  # видео поток с веб камеры
     cap.set(3, 240)  # установка размера окна

@@ -36,11 +36,10 @@ class Data_calculate():
             else:
                 print('Error')
 
-    def contours_search_and_filter(self, frame1, frame2, draw=True):
+    def contours_search_and_filter(self, frame1, frame2, draw=False):
         """
         Frame contours search and filter function. If
-        return: flag (True or False)
-        """
+        return: flag (True or False)"""
         contour_area = 0  #
         diff = cv2.absdiff(frame1,
                            frame2)  # Subtraction function the frame1 and frame2
@@ -49,17 +48,13 @@ class Data_calculate():
         _, thresh = cv2.threshold(blur, 20, 255, cv2.THRESH_BINARY)  # Draw white contours
         dilated = cv2.dilate(thresh, None, iterations=3)  # Contours delate
         contours, _ = cv2.findContours(dilated, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)  # Contours search
-        # if draw:
-        #     cv2.drawContours(frame2, contours, -1, (0, 255, 0), 2)  # Draw contours
-        #     cv2.imshow("image, bitch", frame2)
-        #     cv2.waitKey(100)
+        if draw:
+            cv2.drawContours(frame2, contours, -1, (0, 255, 0), 2)  # Draw contours
+            cv2.imshow("image, bitch", frame2)
+            cv2.waitKey(1000)
         for contour in contours:
             flag = False  # Motion is none
             contour_area = int(cv2.contourArea(contour))
-            if contour_area >= 5000:  # условие при котором площадь выделенного объекта меньше 1000 px
+            if contour_area >= 1000:  # If contour_area >= 5000 flag == True
                 flag = True
-                print(flag, contour_area)
-                cv2.drawContours(frame2, contours, -1, (0, 255, 0), 2)  # Draw contours
-                cv2.imshow("image, bitch", frame2)
-                cv2.waitKey(0)
-        return flag, contour_area
+        return flag, contour_area, frame2

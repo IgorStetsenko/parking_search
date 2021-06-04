@@ -1,9 +1,12 @@
 import cv2
 import argparse
+
+import time
 import run_recognition
 
 from run_camera import Camera_work
 from time import sleep
+from yolov5 import detect
 
 from run_camera import Setting_camera
 from data_calculate import Data_calculate
@@ -21,8 +24,16 @@ if __name__ == "__main__":  # main program algorithm
         while True:
             ret, frame1 = cap.read()
             ret2, frame2 = cap.read()
-
-            move_detector, contour_area = Data_calculate().contours_search_and_filter(frame1, frame2)
+            move_detector, contour_area, frame_orig = Data_calculate().contours_search_and_filter(frame1, frame2)
+            if move_detector:
+                box = detect.detection_function(frame_orig)
+                for i in box:
+                    cv2.rectangle(frame_orig, i[0], i[1], (255, 0, 0), 2)
+                cv2.imshow(str(contour_area), frame_orig)
+                cv2.waitKey(0)
+                cv2.destroyAllWindows()
+                #print(box)
+            #time.sleep(10)
 
 
         cap.release()
