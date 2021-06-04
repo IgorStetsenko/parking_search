@@ -6,9 +6,7 @@ from run_camera import Camera_work
 from time import sleep
 
 from run_camera import Setting_camera
-
-
-
+from data_calculate import Data_calculate
 
 if __name__ == "__main__":  # main program algorithm
     try:
@@ -19,12 +17,17 @@ if __name__ == "__main__":  # main program algorithm
 
         source_file = opt.source
         cap = cv2.VideoCapture(source_file)
-        #rrr = Setting_camera()
-        Setting_camera().set_cap(cap)
+        Setting_camera().set_cap(cap)  # set camera
 
+        while True:
+            ret, frame1 = cap.read()  # frame1, frame2 - два соседних кадра
+            ret2, frame2 = cap.read()
 
-        ret, frame1 = cap.read()
-        ret2, frame2 = cap.read()
+            move_detector, contour_area = Data_calculate().contours_search_and_filter(frame1, frame1)
+            # print(move_detector,contour_area)
+
+        cap.release()
+        cv2.destroyAllWindows()
 
 
 
