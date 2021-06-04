@@ -1,156 +1,8 @@
 import cv2
 import argparse
-from yolov5.utils.datasets import LoadImages
-from yolov5.detect import *
-from twilio.rest import Client
+
+from run_camera import Camera_work
 from time import sleep
-
-class Setting_camera():
-    """
-    """
-    def objects_square_calculate(self, boxes):
-        """
-
-        :param boxes:
-        :return:
-        """
-        pass
-
-class Camera_work():
-
-    def run_camera(self, source):
-        """Doc"""
-        cap = cv2.VideoCapture(source)
-        while True:
-            ret, img = cap.read()
-            if ret:
-                cv2.imshow("camera", img)
-            if cv2.waitKey(10) == 27:
-                cap.release()
-                cv2.destroyAllWindows()
-                break
-
-    def image_show(self, image):
-        cv2.imshow("image, bitch", image)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
-
-    def read_video(self):
-        """Doc"""
-
-    def screen_photo(self):
-        '''Doc'''
-        pass
-
-    def write_photo(self):
-        '''Doc'''
-        pass
-
-    def write_video(self):
-        '''Doc'''
-        pass
-
-    def diff_frame(self, frame1, frame2):
-        '''
-
-        :param frame1:
-        :param frame2:
-        :return:
-        '''
-        diff = cv2.absdiff(frame1, frame2)
-        return diff
-
-class Data_calculate():
-
-    def iou_calculate(self, box1, box2):
-        """Функция рассчитывает метрику IoU и проверяет пересечение прямоугольников"""
-        flag = False
-        ax1, ay1, ax2, ay2 = box1[0][0], box1[0][1], box1[1][0], box1[1][1]
-        bx1, by1, bx2, by2 = box2[0][0], box2[0][1], box2[1][0], box1[1][1]
-        if ax1 < bx2 and ax2 > bx1 and ay1 < by2 and ay2 > by1:
-            flag = True
-            sq_a = abs(ax1 - ax2) * abs(ay1 - ay2)
-            sq_b = abs(bx1 - bx2) * abs(by1 - by2)
-            interArea = abs(max([ax1, ax2]) - min([bx1, bx2])) * abs(max([ay1, ay2]) - min([by1, by2]))
-            iou = interArea / float(abs(abs(sq_a + sq_b) - interArea))
-            return iou, flag
-        else:
-            flag = False
-            return flag
-
-    def boxes_intersection_search(self, prediction_boxes):
-        """This function do boxes intersection search"""
-        j = 0
-        for n in prediction_boxes:
-            i = prediction_boxes.index(n)
-            if j == len(prediction_boxes) - 1:
-                break
-            elif i != len(prediction_boxes) - 1:
-                while i != len(prediction_boxes) - 1:
-                    a = prediction_boxes[i + 1]
-                    self.iou_calculate(n, a)
-                    #                 print(n == a, n, a)
-                    i += 1
-                j += 1
-            else:
-                print('Error')
-
-class Sms_delivery():
-
-    def pull_sms(self):
-        '''The function sms delivery'''
-        # Twilio account details
-        twilio_account_sid = ''
-        twilio_auth_token = ''
-        twilio_source_phone_number = '+'
-
-        # Create a Twilio client object instance
-        client = Client(twilio_account_sid, twilio_auth_token)
-
-        # Send an SMS
-        message = client.messages.create(
-            body="Seat is free!!!",
-            from_=twilio_source_phone_number,
-            to=""
-        )
-
-class Frame_utils():
-    def contours_search_and_filter(self,frame1,frame2):
-        """
-        :param frame2:
-        :param frame1:
-        :return:
-        """
-
-        contour_area = 0
-        flag = False
-        diff = cv2.absdiff(frame1,
-                           frame2)  # нахождение разницы двух кадров, которая проявляется лишь при изменении одного из них, т.е. с этого момента наша программа реагирует на любое движение.
-        gray = cv2.cvtColor(diff, cv2.COLOR_BGR2GRAY)  # перевод кадров в черно-белую градацию
-        blur = cv2.GaussianBlur(gray, (5, 5), 0)  # фильтрация лишних контуров
-        _, thresh = cv2.threshold(blur, 20, 255,
-                                  cv2.THRESH_BINARY)  # метод для выделения кромки объекта белым цветом
-        dilated = cv2.dilate(thresh, None,
-                             iterations=3)  # данный метод противоположен методу erosion(), т.е. эрозии объекта, и расширяет выделенную на предыдущем этапе область
-        сontours, _ = cv2.findContours(dilated, cv2.RETR_TREE,
-                                       cv2.CHAIN_APPROX_SIMPLE)  # нахождение массива контурных точек
-        #print(сontours, "contour")
-        cv2.drawContours(frame1, сontours, -1, (0, 255, 0), 2) #также можно было просто нарисовать контур объекта
-        cv2.imshow("image, bitch", frame2)
-        cv2.waitKey(1000)
-        cv2.destroyAllWindows()
-        for contour in сontours:
-            # (x, y, w, h) = cv2.boundingRect(contour)  # преобразование массива из предыдущего этапа в кортеж из четырех координат
-            # метод contourArea() по заданным contour точкам, здесь кортежу,
-            # вычисляет площадь зафиксированного объекта в каждый момент времени, это можно проверить
-            #
-            contour_area = cv2.contourArea(contour)
-            print(contour_area, "contour_area")
-            if contour_area>500:  # условие при котором площадь выделенного объекта меньше 700 px
-                flag = True
-
-        return flag, contour_area
-
 
 
 if __name__ == "__main__":
@@ -159,55 +11,60 @@ if __name__ == "__main__":
         parser.add_argument('--source', type=str, default="yolov5/test2.mp4",
                             help='source')  # file/folder, 0,1,2 for webcam
         opt = parser.parse_args()
-        source_image = opt.source
-        cap = cv2.VideoCapture(source_image)
-        # cap = cv2.VideoCapture(0)  # видео поток с веб камеры
-        cap.set(3, 240)  # установка размера окна
-        cap.set(4, 480)
-        cap.set(cv2.CAP_PROP_FPS, 25)
-        ret, frame1 = cap.read()
-        ret, frame2 = cap.read()
-        stop_detection = True
-        move_detector = Frame_utils()
-        cam_work = Camera_work()
+        camera = cv2.VideoCapture(0)
 
-        while True:  # метод isOpened() выводит статус видеопотока
-            frame1 = cv2.rectangle(frame1, (1, 1), (960, 200), (0, 0, 0), -1) #Временное решение
-            frame2 = cv2.rectangle(frame2, (1, 1), (960, 200), (0, 0, 0), -1)
-
-            contours_filter, contour_area = move_detector.contours_search_and_filter(frame1,frame2)
-
-            print(contours_filter, contour_area)
-            stop_detection = [True if contours_filter else False]
-
-
-            #cv2.imshow("frame1", frame1)
-            sleep(0.01)
-            frame1 = frame2
-            ret, frame2 = cap.read()
-            if cv2.waitKey(40) == 27:
-                cap.release()
-                cv2.destroyAllWindows()
-                break
-            if contours_filter and stop_detection:
-
-                print(contours_filter,contour_area)
-                frame2 = cv2.rectangle(frame2, (1, 1), (960, 200), (0, 0, 0), -1)
-                prediction_boxes = detection_function(frame2)
-                for i in prediction_boxes:
-                    cv2.rectangle(frame2, i[0], i[1], (255, 0, 0), 2)
-                cam_work.image_show(frame2)
-
-                print(prediction_boxes, "prediction_boxes")
-
-            else:
-                sleep(0.001)
-                print("пауза")
-        cap.release()
-        cv2.destroyAllWindows()
+        camera = Camera_work()
+        img = camera.run_video(opt.source)
 
     except NameError:
         print("Give source image, video or stream")
+
+
+
+
+
+        #
+        # source_image = opt.source
+        # cap = cv2.VideoCapture(source_image)
+        # # cap = cv2.VideoCapture(0)  # видео поток с веб камеры
+        # cap.set(3, 240)  # установка размера окна
+        # cap.set(4, 480)
+        # cap.set(cv2.CAP_PROP_FPS, 25)
+        # ret, frame1 = cap.read()
+        # ret, frame2 = cap.read()
+        # stop_detection = True
+        # move_detector = Frame_utils()
+        # cam_work = Camera_work()
+        #
+        # while True:  # метод isOpened() выводит статус видеопотока
+        #     frame1 = cv2.rectangle(frame1, (1, 1), (960, 200), (0, 0, 0), -1) #Временное решение
+        #     frame2 = cv2.rectangle(frame2, (1, 1), (960, 200), (0, 0, 0), -1)
+        #     contours_filter, contour_area = move_detector.contours_search_and_filter(frame1,frame2)
+        #     print(contours_filter, contour_area)
+        #     stop_detection = [True if contours_filter else False]
+        #     #cv2.imshow("frame1", frame1)
+        #     sleep(0.01)
+        #     frame1 = frame2
+        #     ret, frame2 = cap.read()
+        #     if cv2.waitKey(40) == 27:
+        #         cap.release()
+        #         cv2.destroyAllWindows()
+        #         break
+        #     if contours_filter and stop_detection:
+        #         print(contours_filter,contour_area)
+        #         frame2 = cv2.rectangle(frame2, (1, 1), (960, 200), (0, 0, 0), -1)
+        #         prediction_boxes = detection_function(frame2)
+        #         for i in prediction_boxes:
+        #             cv2.rectangle(frame2, i[0], i[1], (255, 0, 0), 2)
+        #         cam_work.image_show(frame2)
+        #         print(prediction_boxes, "prediction_boxes")
+        #     else:
+        #         sleep(0.001)
+        #         print("пауза")
+        # cap.release()
+        # cv2.destroyAllWindows()
+
+
 
     # boxes = Data_calculate()
     # boxes_intersection_array = boxes.boxes_intersection_search(prediction_boxes)
