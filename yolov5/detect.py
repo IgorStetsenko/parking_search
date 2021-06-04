@@ -50,7 +50,7 @@ def detection_function(frame, source="yolov5/66521.jpg", stop_detection=True, vi
     img = torch.from_numpy(img).to(device)
     img = img.half() if half else img.float()  # uint8 to fp16/32
     img /= 255.0  # 0 - 255 to 0.0 - 1.0
-    print(img.ndimension(), "++++")
+    #print(img.ndimension(), "++++")
     if img.ndimension() == 3:
         img = img.unsqueeze(0)
         pred = model(img, augment=False)[0]
@@ -65,9 +65,9 @@ def detection_function(frame, source="yolov5/66521.jpg", stop_detection=True, vi
         if len(det):
             # Rescale boxes from img_size to im0 size
             det[:, :4] = scale_coords(img.shape[2:], det[:, :4], img0.shape).round()
-
             # Write results
             for *xyxy, conf, cls in reversed(det):
-                points = plot_one_box(xyxy, img0, color=colors[int(cls)], line_thickness=3)
+                x = xyxy
+                points = (int(x[0]), int(x[1])), (int(x[2]), int(x[3]))
                 box.append(points)
     return box
