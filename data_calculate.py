@@ -38,7 +38,7 @@ class Data_calculate():
 
     def contours_search_and_filter(self, frame1, frame2, draw=False):
         """
-        Frame contours search and filter function. If
+        Frame contours search and filter function.
         return: flag (True or False)"""
         contour_area = 0  #
         diff = cv2.absdiff(frame1,

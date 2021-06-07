@@ -19,8 +19,8 @@ if __name__ == "__main__":  # main program algorithm
         Setting_camera().set_cap(cap)  # set camera
 
         while True:
-            ret, frame1 = cap.read()
-            ret2, frame2 = cap.read()
+            status_frame_1, frame1 = cap.read()
+            status_frame_2, frame2 = cap.read()
             move_detector, contour_area, frame_orig = Data_calculate().contours_search_and_filter(frame1, frame2)
             if move_detector:
                 box = detect.detection_function(frame_orig)
@@ -28,17 +28,11 @@ if __name__ == "__main__":  # main program algorithm
                 for i in box:
                     cv2.rectangle(frame2, i[0], i[1], (255, 0, 0), 0)
                 cv2.imshow(str(contour_area), frame2)
-                cv2.waitKey(0)
+                cv2.waitKey(500)
                 cv2.destroyAllWindows()
             #time.sleep(10)
-
-
         cap.release()
         cv2.destroyAllWindows()
-
-
-
-
 
     except NameError:
         print("Give source image, video or stream")
