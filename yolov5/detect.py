@@ -79,7 +79,7 @@ def detection_function(frame, source="yolov5/66521.jpg", stop_detection=True, vi
                 box_class = data_classes[int(cls)]
                 points = (int(x[0]), int(x[1])), (int(x[2]), int(x[3]))
                 print(box_class)
-                if box_class == "truck" or "car":
+                if box_class == "truck" or "car":   #Add truck or car only
                     box.append(points)
                     #
 

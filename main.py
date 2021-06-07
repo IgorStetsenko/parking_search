@@ -24,11 +24,13 @@ if __name__ == "__main__":  # main program algorithm
             move_detector, contour_area, frame_orig = Data_calculate().contours_search_and_filter(frame1, frame2)
             if move_detector:  # if move_detector == True (Box>5000 px)
                 box = detect.detection_function(frame_orig)
-                for i in box:
-                    cv2.rectangle(frame2, i[0], i[1], (255, 0, 0), 0)
-                cv2.imshow(str(contour_area), frame2)
-                cv2.waitKey(500)
-                cv2.destroyAllWindows()
+                parking_space_box = box
+                auto_space_box = box
+                # for i in box:
+                #     cv2.rectangle(frame2, i[0], i[1], (255, 0, 0), 0)
+                # cv2.imshow(str(contour_area), frame2)
+                # cv2.waitKey(500)
+                # cv2.destroyAllWindows()
             # time.sleep(10)
         cap.release()
         cv2.destroyAllWindows()
