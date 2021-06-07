@@ -22,33 +22,21 @@ if __name__ == "__main__":  # main program algorithm
             status_frame_1, frame1 = cap.read()
             status_frame_2, frame2 = cap.read()
             move_detector, contour_area, frame_orig = Data_calculate().contours_search_and_filter(frame1, frame2)
-            if move_detector:
+            if move_detector:  # if move_detector == True (Box>5000 px)
                 box = detect.detection_function(frame_orig)
-                print(box)
                 for i in box:
                     cv2.rectangle(frame2, i[0], i[1], (255, 0, 0), 0)
                 cv2.imshow(str(contour_area), frame2)
                 cv2.waitKey(500)
                 cv2.destroyAllWindows()
-            #time.sleep(10)
+            # time.sleep(10)
         cap.release()
         cv2.destroyAllWindows()
 
     except NameError:
         print("Give source image, video or stream")
 
-        #
-        # source_image = opt.source
-        # cap = cv2.VideoCapture(source_image)
-        # # cap = cv2.VideoCapture(0)  # видео поток с веб камеры
-        # cap.set(3, 240)  # установка размера окна
-        # cap.set(4, 480)
-        # cap.set(cv2.CAP_PROP_FPS, 25)
-        # ret, frame1 = cap.read()
-        # ret, frame2 = cap.read()
-        # stop_detection = True
-        # move_detector = Frame_utils()
-        # cam_work = Camera_work()
+
         #
         # while True:  # метод isOpened() выводит статус видеопотока
         #     frame1 = cv2.rectangle(frame1, (1, 1), (960, 200), (0, 0, 0), -1) #Временное решение

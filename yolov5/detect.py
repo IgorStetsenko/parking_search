@@ -13,6 +13,9 @@ from utils.general import check_img_size, non_max_suppression, apply_classifier,
 from utils.plots import plot_one_box
 from utils.torch_utils import select_device, load_classifier, time_synchronized
 from yolov5.utils.datasets import *
+import yaml
+from yaml.loader import SafeLoader
+
 
 def detection_function(frame, source="yolov5/66521.jpg", stop_detection=True, view_img='store_true', save_txt=True,
                        imgsz=640, save_img=False):
@@ -50,7 +53,7 @@ def detection_function(frame, source="yolov5/66521.jpg", stop_detection=True, vi
     img = torch.from_numpy(img).to(device)
     img = img.half() if half else img.float()  # uint8 to fp16/32
     img /= 255.0  # 0 - 255 to 0.0 - 1.0
-    #print(img.ndimension(), "++++")
+    # print(img.ndimension(), "++++")
     if img.ndimension() == 3:
         img = img.unsqueeze(0)
         pred = model(img, augment=False)[0]
@@ -65,9 +68,19 @@ def detection_function(frame, source="yolov5/66521.jpg", stop_detection=True, vi
         if len(det):
             # Rescale boxes from img_size to im0 size
             det[:, :4] = scale_coords(img.shape[2:], det[:, :4], img0.shape).round()
-            # Write results
+
+
+            with open('yolov5/models/coco.yaml') as f:
+                # читаем документ YAML
+                data_classes = yaml.load(f, Loader=SafeLoader)["names"]
+
             for *xyxy, conf, cls in reversed(det):
                 x = xyxy
+                box_class = data_classes[int(cls)]
                 points = (int(x[0]), int(x[1])), (int(x[2]), int(x[3]))
-                box.append(points)
+                print(box_class)
+                if box_class == "truck" or "car":
+                    box.append(points)
+                    #
+
     return box

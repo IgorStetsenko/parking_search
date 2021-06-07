@@ -3,6 +3,19 @@ import cv2
 
 class Data_calculate():
 
+    def create_array_parking_space(self):
+        """
+
+        :return:
+        """
+
+
+        pass
+
+    def object_dispersion_calculate(self):
+
+        pass
+
     def iou_calculate(self, box1, box2):
         """Функция рассчитывает метрику IoU и проверяет пересечение прямоугольников"""
         flag = False
