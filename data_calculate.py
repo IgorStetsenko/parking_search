@@ -1,4 +1,5 @@
 import cv2
+import numpy as np
 
 
 class Data_calculate():
@@ -8,9 +9,11 @@ class Data_calculate():
 
         :return:
         """
-
-
         pass
+
+    def euclidean_distance(self,x1,x2):
+        ans = np.linalg.norm(x1 + x2)
+        return ans
 
 
     def iou_calculate(self, box1, box2):
