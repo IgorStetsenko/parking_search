@@ -26,12 +26,12 @@ if __name__ == "__main__":  # main program algorithm
                 box = detect.detection_function(frame_orig)
                 parking_space_box = box
                 auto_space_box = box
-                # for i in box:
-                #     cv2.rectangle(frame2, i[0], i[1], (255, 0, 0), 0)
-                # cv2.imshow(str(contour_area), frame2)
-                # cv2.waitKey(500)
-                # cv2.destroyAllWindows()
-            # time.sleep(10)
+                for i in box:
+                    cv2.rectangle(frame2, i[0], i[1], (255, 0, 0), 0)
+                cv2.imshow(str(contour_area), frame2)
+                cv2.waitKey(500)
+                cv2.destroyAllWindows()
+            time.sleep(10)
         cap.release()
         cv2.destroyAllWindows()
 
