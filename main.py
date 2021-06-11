@@ -30,8 +30,8 @@ if __name__ == "__main__":  # main program algorithm
                     cv2.rectangle(frame2, i[0], i[1], (255, 0, 0), 0)
                 Camera_work().image_show(frame2)
 
-        cap.release()
-        cv2.destroyAllWindows()
+        #cap.release()
+        #cv2.destroyAllWindows()
 
     except NameError:
         print("Give source image, video or stream")
