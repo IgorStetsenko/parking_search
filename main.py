@@ -22,13 +22,17 @@ if __name__ == "__main__":  # main program algorithm
             status_frame_1, frame1 = cap.read()
             status_frame_2, frame2 = cap.read()
             move_detector, contour_area, frame_orig = Data_calculate().contours_search_and_filter(frame1, frame2)
+            parking_space_box = detect.detection_function(frame_orig)# init #the park space box
             if move_detector:  # if move_detector == True (Box>5000 px)
-                box = detect.detection_function(frame_orig)
-                parking_space_box = box
-                auto_space_box = box
-                for i in box:
-                    cv2.rectangle(frame2, i[0], i[1], (255, 0, 0), 0)
-                Camera_work().image_show(frame2)
+                box_auto = detect.detection_function(frame_orig)
+                parking_space_box = Data_calculate().update_parking_space_box(parking_space_box, box_auto)
+                print(parking_space_box)
+
+
+                # auto_space_box = box
+                # for i in box:
+                #     cv2.rectangle(frame2, i[0], i[1], (255, 0, 0), 0)
+                # Camera_work().image_show(frame2)
 
         #cap.release()
         #cv2.destroyAllWindows()
