@@ -4,7 +4,7 @@ a = [((251, 134), (298, 180)),
 
 b = [((251, 134), (298, 180)),
      ((95, 192), (201, 293)),
-     ((13, 196), (53, 272)), ((649, 241), (713, 298)),((649, 241), (713, 298))]
+     ((13, 196), (53, 272)), ((649, 241), (713, 298)), ((100, 100), (150, 150))]
 
 
 def iou_calculate(box1, box2):
@@ -35,7 +35,7 @@ def update_parking_space_box(parking_space_box, box_auto):
             box_flag.append(flag)
             i += 1
         box_average = ((sum(box_flag)) / (len(box_flag)))
-        box_flag=[]
+        box_flag = []
         if box_average == 0:
             parking_space_box.append(car)
     print(parking_space_box)

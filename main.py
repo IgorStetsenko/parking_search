@@ -17,16 +17,33 @@ if __name__ == "__main__":  # main program algorithm
         source_file = opt.source
         cap = cv2.VideoCapture(source_file)
         Setting_camera().set_cap(cap)  # set camera
+        status_frame_init, frame_init = cap.read()
+        frame_init = frame_init[200:960, 0:720]
+        parking_space_box = detect.detection_function(frame_init)  # init #the park space box
 
         while True:
             status_frame_1, frame1 = cap.read()
             status_frame_2, frame2 = cap.read()
+            frame1 = frame1[200:960, 0:720]
+            frame2 = frame2[200:960, 0:720]
             move_detector, contour_area, frame_orig = Data_calculate().contours_search_and_filter(frame1, frame2)
-            parking_space_box = detect.detection_function(frame_orig)# init #the park space box
+            print(frame_orig.shape)
+            print(contour_area, move_detector)
             if move_detector:  # if move_detector == True (Box>5000 px)
+                cv2.imshow("image, bitch", frame_orig)
+                cv2.waitKey(0)
+                cv2.destroyAllWindows()
                 box_auto = detect.detection_function(frame_orig)
                 parking_space_box = Data_calculate().update_parking_space_box(parking_space_box, box_auto)
                 print(parking_space_box)
+
+                for i in parking_space_box:
+                    frame_orig = cv2.rectangle(frame_orig, i[0], i[1], (255, 255, 255), thickness=2)
+
+                cv2.imshow("image, bitch", frame_orig)
+                cv2.waitKey(0)
+                cv2.destroyAllWindows()
+
 
 
                 # auto_space_box = box
@@ -34,12 +51,10 @@ if __name__ == "__main__":  # main program algorithm
                 #     cv2.rectangle(frame2, i[0], i[1], (255, 0, 0), 0)
                 # Camera_work().image_show(frame2)
 
-        #cap.release()
-        #cv2.destroyAllWindows()
+        # cv2.destroyAllWindows()
 
     except NameError:
         print("Give source image, video or stream")
-
 
         #
         # while True:  # метод isOpened() выводит статус видеопотока

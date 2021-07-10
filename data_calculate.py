@@ -52,6 +52,9 @@ class Data_calculate():
         """
         Frame contours search and filter function.
         return: flag (True or False)"""
+        flag = False  # Motion is none
+
+
         contour_area = 0  #
         diff = cv2.absdiff(frame1,
                            frame2)  # Subtraction function the frame1 and frame2
@@ -60,34 +63,30 @@ class Data_calculate():
         _, thresh = cv2.threshold(blur, 20, 255, cv2.THRESH_BINARY)  # Draw white contours
         dilated = cv2.dilate(thresh, None, iterations=3)  # Contours delate
         contours, _ = cv2.findContours(dilated, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)  # Contours  search
-        for contour in contours:
-            flag = False  # Motion is none
-            contour_area = int(cv2.contourArea(contour))
-            if contour_area >= 1000:  # If contour_area >= 5000 flag == True
-                flag = True
-            if draw:
-                cv2.drawContours(frame2, contours, -1, (0, 255, 0), 2)  # Draw contours
-                cv2.imshow("image, bitch", frame2)
-                cv2.waitKey(0)
+        if contours:
+            for contour in contours:
+                contour_area = int(cv2.contourArea(contour))
+                if contour_area >= 1000:  # If contour_area >= 5000 flag == True
+                    flag = True
+                if draw:
+                    cv2.drawContours(frame2, contours, -1, (0, 255, 0), 2)  # Draw contours
 
         return flag, contour_area, frame2
 
     def update_parking_space_box(self, parking_space_box, box_auto):
         """Update parking space box function"""
-        global i
-        print(parking_space_box)
-        print(box_auto)
-
-        j = 0
         box_flag = []
-        while j < len(box_auto):
-            for i in box_auto:
-                iou, flag = self.iou_calculate(i, box_auto[j])
+        j = 0
+        for car in box_auto:
+            i = 0
+            while i <= len(parking_space_box) - 1:
+                iou, flag = self.iou_calculate(car, parking_space_box[i])
                 box_flag.append(flag)
-            box_average = sum(box_flag) / len(box_flag)
+                i += 1
+            box_average = ((sum(box_flag)) / (len(box_flag)))
+            box_flag = []
             if box_average == 0:
-                parking_space_box.append(i)
-            j += 1
-
+                parking_space_box.append(car)
+        print(parking_space_box)
         return parking_space_box
 
