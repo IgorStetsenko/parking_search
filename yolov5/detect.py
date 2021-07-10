@@ -1,17 +1,7 @@
-import argparse
-import time
-import sys
-from pathlib import Path
-import cv2
-import torch
-import torch.backends.cudnn as cudnn
 from numpy import random
 from models.experimental import attempt_load
-from utils.datasets import LoadStreams, LoadImages
-from utils.general import check_img_size, non_max_suppression, apply_classifier, scale_coords, xyxy2xywh, \
-    strip_optimizer, set_logging, increment_path
-from utils.plots import plot_one_box
-from utils.torch_utils import select_device, load_classifier, time_synchronized
+from utils.general import check_img_size, non_max_suppression, scale_coords, set_logging, increment_path
+from utils.torch_utils import select_device
 from yolov5.utils.datasets import *
 import yaml
 from yaml.loader import SafeLoader
@@ -53,7 +43,6 @@ def detection_function(frame, source="yolov5/66521.jpg", stop_detection=True, vi
     img = torch.from_numpy(img).to(device)
     img = img.half() if half else img.float()  # uint8 to fp16/32
     img /= 255.0  # 0 - 255 to 0.0 - 1.0
-    # print(img.ndimension(), "++++")
     if img.ndimension() == 3:
         img = img.unsqueeze(0)
         pred = model(img, augment=False)[0]
@@ -78,9 +67,6 @@ def detection_function(frame, source="yolov5/66521.jpg", stop_detection=True, vi
                 x = xyxy
                 box_class = data_classes[int(cls)]
                 points = (int(x[0]), int(x[1])), (int(x[2]), int(x[3]))
-                #print(box_class)
                 if box_class == "truck" or "car":   #Add truck or car only
                     box.append(points)
-                    #
-
     return box

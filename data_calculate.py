@@ -29,7 +29,7 @@ class Data_calculate():
             interArea = abs(max([ax1, ax2]) - min([bx1, bx2])) * abs(max([ay1, ay2]) - min([by1, by2]))
             iou = interArea / float(abs(abs(sq_a + sq_b) - interArea))
 
-        return  iou,flag
+        return iou, flag
 
     def boxes_intersection_search(self, prediction_boxes):
         """This function do boxes intersection search"""
@@ -53,7 +53,6 @@ class Data_calculate():
         Frame contours search and filter function.
         return: flag (True or False)"""
         flag = False  # Motion is none
-
 
         contour_area = 0  #
         diff = cv2.absdiff(frame1,
@@ -87,6 +86,30 @@ class Data_calculate():
             box_flag = []
             if box_average == 0:
                 parking_space_box.append(car)
-        print(parking_space_box)
         return parking_space_box
 
+    def get_status_space(self, parking_space_box, box_auto):
+        """Update parking space box function"""
+        box_flag = []
+        status_space = True
+        for space in parking_space_box:
+            i = 0
+            while i <= len(box_auto) - 1:
+                iou, flag = self.iou_calculate(space, box_auto[i])
+                box_flag.append(flag)
+                i += 1
+            box_average = ((sum(box_flag)) / (len(box_flag)))
+            box_flag = []
+            if box_average == 0:
+                status_space = False
+        print(status_space)
+        return status_space
+
+    def crop_image(self, frame, y1, y2, x1, x2):
+        """
+        The function crop input frame
+        :input frame:
+        :return: crop frame
+        """
+        frame = frame[y1:y2, x1:x2]
+        return frame
